@@ -38,7 +38,7 @@ module Utils
           @invitation_importer.import!(
             attributes: { external_id: row[":id"] },
             extra: { person_id: person.id,
-                     organizer: row.cleaned_text("organitzador") || "n/a",
+                     organizer: row.cleaned_text("organitzador"),
                      title: row.cleaned_text("motiu"),
                      location: location,
                      start_date: row.datetime("data_inici"),
