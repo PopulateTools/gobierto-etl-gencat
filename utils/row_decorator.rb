@@ -18,9 +18,8 @@ module Utils
     def location(attribute)
       location_name = cleaned_text(attribute)
       location_search_results = Geocoder.search(location_name)
-      { "name" => location_name,
-        "lat" => location_search_results.first.latitude,
-        "lon" => location_search_results.first.longitude }
+      location = location_search_results.first
+      destination_object(location, location_name)
     end
 
     def locations_list(attribute)
@@ -28,9 +27,7 @@ module Utils
       location_search_results = Geocoder.search(location_name)
       {
         "destinations" => location_search_results.map do |result|
-          { "name" => result.address,
-            "lat" => result.latitude,
-            "lon" => result.longitude }
+          destination_object(result, location_name)
         end
       }
     end
@@ -49,6 +46,18 @@ module Utils
 
     def raw_text(attribute)
       @object[attribute].to_s
+    end
+
+    private
+
+    def destination_object(location, location_name)
+      country = ISO3166::Country.find_country_by_name(location.country)
+      {
+        "name" => location_name,
+        "lat" => location.latitude,
+        "lon" => location.longitude,
+        "country_code" => country.alpha2
+      }
     end
   end
 end
