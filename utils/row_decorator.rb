@@ -56,7 +56,9 @@ module Utils
         "name" => location_name,
         "lat" => location.latitude,
         "lon" => location.longitude,
-        "country_code" => country.alpha2
+        "country_code" => country.alpha2,
+        "country_name" => location.country,
+        "city_name" => location.city
       }
     end
   end
