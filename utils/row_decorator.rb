@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "./countries/iso3166"
+
 module Utils
   class RowDecorator < BaseDecorator
     def initialize(row)
