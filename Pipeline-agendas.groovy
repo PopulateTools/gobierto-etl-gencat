@@ -5,6 +5,9 @@ pipeline {
         PATH = "/home/ubuntu/.rbenv/shims:$PATH"
         GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current"
         GENCAT_ETL = "/var/www/gobierto-etl-gencat/current"
+        // Variables that must be defined via Jenkins UI:
+        // GOBIERTO = "/var/www/gobierto/currentt"
+        // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
     }
     stages {
         stage('Extract > Download last start query date') {
