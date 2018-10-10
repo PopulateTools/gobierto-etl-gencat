@@ -6,6 +6,7 @@ pipeline {
         GOBIERTO_ETL_UTILS = "/var/www/gobierto-etl-utils/current"
         GENCAT_ETL = "/var/www/gobierto-etl-gencat/current"
         GOBIERTO = "/var/www/gobierto/current"
+        GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
     }
     stages {
         stage('Extract > Download last start query date') {
@@ -36,10 +37,10 @@ pipeline {
         }
         stage('Transform & Load > Process resources') {
             steps {
-                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv gencat.gobify.net"
-                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv gencat.gobify.net"
-                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv gencat.gobify.net"
-                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv gencat.gobify.net"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv ${GENCAT_SITE_DOMAIN}"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv ${GENCAT_SITE_DOMAIN}"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv ${GENCAT_SITE_DOMAIN}"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv ${GENCAT_SITE_DOMAIN}"
             }
         }
         stage('Documentation > Upload last execution date') {
