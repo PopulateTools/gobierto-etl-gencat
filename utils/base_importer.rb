@@ -1,6 +1,7 @@
 require_relative "./row_decorator"
 require_relative "./people_importer"
 require_relative "./resource_importer"
+require_relative "./alpha2"
 require "csv"
 
 module Utils
