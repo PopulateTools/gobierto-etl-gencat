@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "countries"
-
 module Utils
   class RowDecorator < BaseDecorator
     def initialize(row)
