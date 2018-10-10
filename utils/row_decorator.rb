@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "countries"
+
 module Utils
   class RowDecorator < BaseDecorator
     def initialize(row)
@@ -51,7 +53,7 @@ module Utils
     private
 
     def destination_object(location, location_name)
-      country = ISO3166::Country.find_country_by_name(location.country)
+      country = ::ISO3166::Country.find_country_by_name(location.country)
       {
         "name" => location_name,
         "lat" => location.latitude,

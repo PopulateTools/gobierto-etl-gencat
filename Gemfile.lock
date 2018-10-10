@@ -45,6 +45,11 @@ GEM
     builder (3.2.3)
     byebug (10.0.2)
     concurrent-ruby (1.0.5)
+    countries (2.1.4)
+      i18n_data (~> 0.8.0)
+      money (~> 6.9)
+      sixarm_ruby_unaccent (~> 1.1)
+      unicode_utils (~> 1.4)
     crass (1.0.4)
     elasticsearch (6.1.0)
       elasticsearch-api (= 6.1.0)
@@ -65,6 +70,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
+    i18n_data (0.8.0)
     ine-places (0.2.0)
       activesupport (>= 4.2)
     jmespath (1.4.0)
@@ -73,6 +79,8 @@ GEM
       nokogiri (>= 1.5.9)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
+    money (6.13.0)
+      i18n (>= 0.6.4, <= 2)
     multi_json (1.13.1)
     multipart-post (2.0.0)
     nokogiri (1.8.3)
@@ -89,16 +97,19 @@ GEM
       loofah (~> 2.2, >= 2.2.2)
     ruby-prof (0.17.0)
     sequel (5.9.0)
+    sixarm_ruby_unaccent (1.2.0)
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    unicode_utils (1.4.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   byebug
+  countries
   gobierto_data!
 
 BUNDLED WITH
-   1.16.2
+   1.16.3
