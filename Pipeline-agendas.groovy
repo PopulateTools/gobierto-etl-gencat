@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Extract > Check data presence') {
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb all"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb all 2017-06-01"
             }
         }
         stage('Extract > Clean previous downloads') {
