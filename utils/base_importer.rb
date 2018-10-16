@@ -2,6 +2,7 @@ require_relative "./row_decorator"
 require_relative "./people_importer"
 require_relative "./resource_importer"
 require_relative "./alpha2"
+require_relative "./names_conflict_resolutions"
 require "csv"
 
 module Utils
