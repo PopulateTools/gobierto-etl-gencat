@@ -32,6 +32,12 @@ if file.exist?
   importer = Utils::TripsImporter.new(path: file.file_path, site: site)
   puts "Importing trips from file: #{ file.file_path }"
   importer.import!
+  if importer.errors?
+    errors_output = Utils::LocalStorage.new(path: "output/trips_errors.txt", content: importer.errors.pretty_inspect)
+    errors_output.save
+    puts "Some errors have prevented the load of some data. A report has been generated in #{ errors_output.file_path }"
+    exit(-1)
+  end
 else
   puts "Trips file is not present. Nothing to do"
 end
