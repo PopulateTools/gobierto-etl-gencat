@@ -70,6 +70,8 @@ module Utils
         puts "===================================="
       end
 
+      @errors << "Test error on events"
+
       super
     end
 
