@@ -10,6 +10,7 @@ FAKE_ATTRIBUTE_VALUE = "REMOVE_ME"
 FAKE_ATTRIBUTE_REGEX = /=\"#{FAKE_ATTRIBUTE_VALUE}\"/
 ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat/web/resources"
 ASSETS_HTTPS_LOCATION = "https://web.gencat.cat/web/resources"
+GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 
 # Description:
 #
@@ -94,15 +95,26 @@ body_tag = layout_page.xpath("//body").first
 text_node = Nokogiri::XML::Text.new("{% render_partial 'layouts/gobierto_footer' %}", layout_page)
 body_tag.add_child(text_node)
 
-# 6. Remove placeholder node attribute values
+# 6. Insert temporary tag to be replaced with the styles overries later on
+
+styles_node = Nokogiri::XML::Text.new(GOBIERTO_STYLES_OVERRIDES_LOCATOR, layout_page)
+head_tag = layout_page.xpath("//head").first
+head_tag.add_child(styles_node)
+
+# 7. Remove placeholder node attribute values
 
 layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 
-# 7. Replace HTTP assets per HTTPs
+# 8. Replace HTTP assets per HTTPs
 
 layout_string = layout_string.gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 
-# 8. Write output file
+# 9. Replace custom styles locator with real content
+
+styles_string = File.read("#{File.dirname(__FILE__)}/gobierto_styles_overrides.html").to_s
+layout_string = layout_string.gsub(GOBIERTO_STYLES_OVERRIDES_LOCATOR, styles_string)
+
+# 10. Write output file
 
 File.write(output_file_path, layout_string)
 
