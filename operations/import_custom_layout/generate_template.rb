@@ -8,6 +8,8 @@ require "nokogiri"
 
 FAKE_ATTRIBUTE_VALUE = "REMOVE_ME"
 FAKE_ATTRIBUTE_REGEX = /=\"#{FAKE_ATTRIBUTE_VALUE}\"/
+ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat/web/resources"
+ASSETS_HTTPS_LOCATION = "https://web.gencat.cat/web/resources"
 
 # Description:
 #
@@ -92,7 +94,15 @@ body_tag = layout_page.xpath("//body").first
 text_node = Nokogiri::XML::Text.new("{% render_partial 'layouts/gobierto_footer' %}", layout_page)
 body_tag.add_child(text_node)
 
+# 6. Remove placeholder node attribute values
+
 layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
+
+# 7. Replace HTTP assets per HTTPs
+
+layout_string = layout_string.gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+
+# 8. Write output file
 
 File.write(output_file_path, layout_string)
 
