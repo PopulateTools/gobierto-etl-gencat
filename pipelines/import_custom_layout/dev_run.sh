@@ -9,7 +9,7 @@ STORAGE_DIR=$DEV_DIR/gobierto-etl-gencat/tmp
 wget -O $STORAGE_DIR/layouts_application.html $LAYOUT_LOCATION
 
 # Transform > Insert custom tags
-ruby $GENCAT_ETL/operations/import_custom_layout/generate_template.rb $STORAGE_DIR/layouts_application.html $STORAGE_DIR/layouts_application.html.erb
+cd $GENCAT_ETL; ruby operations/import_custom_layout/generate_template.rb $STORAGE_DIR/layouts_application.html $STORAGE_DIR/layouts_application.html.erb
 
 # Load > Update site template
 cd $DEV_DIR/gobierto; bin/rails runner $GENCAT_ETL/operations/import_custom_layout/load_template.rb $GENCAT_SITE_DOMAIN $STORAGE_DIR/layouts_application.html.erb
