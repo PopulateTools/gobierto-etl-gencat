@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Extract > Download layout') {
             steps {
-               sh "wget -O ${STORAGE_DIR}/layouts_application.html ${LAYOUT_LOCATION}"
+               sh "wget -O ${STORAGE_DIR}/layouts_application.html '${LAYOUT_LOCATION}'"
             }
         }
         stage('Transform > Add custom tags to layout') {
