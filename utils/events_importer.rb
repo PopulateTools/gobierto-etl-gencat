@@ -70,10 +70,6 @@ module Utils
         puts "===================================="
       end
 
-      error = { resource_attrs: "Test attrs",
-                not_persisted_resources: [] }
-      @errors << error
-
       super
     end
 
