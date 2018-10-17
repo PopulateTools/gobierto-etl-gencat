@@ -36,7 +36,7 @@ if file.exist?
     errors_output = Utils::LocalStorage.new(path: "output/gifts_errors.txt", content: importer.errors.pretty_inspect)
     start_query_date = Utils::LocalStorage.new(path: "output/start_query_date.txt")
     first_error_date = importer.first_record_with_errors_date
-    if !start_query_date.exist? || DateTime.parse(start_query_date.content) > first_error_date
+    if !start_query_date.exist? || (first_error_date && DateTime.parse(start_query_date.content) > first_error_date)
       start_query_date.content = first_error_date
       start_query_date.save
     end

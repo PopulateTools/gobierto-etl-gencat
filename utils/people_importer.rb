@@ -126,8 +126,7 @@ module Utils
     end
 
     def dictionary
-      # @dictionary ||= YAML.load(File.read(File.expand_path('downloads/names_conflict_resolutions.yml', __FILE__)))
-      @dictionary ||= YAML.load(File.read(Utils::LocalStorage.new(path: 'downloads/names_conflict_resolutions.yml').file_path))
+      NAMES_CONFLICT_RESOLUTIONS
     end
 
     def summarize_attributes(resource, attributes)
