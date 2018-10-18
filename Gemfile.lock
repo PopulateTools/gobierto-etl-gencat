@@ -34,6 +34,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     ansi (1.5.0)
+    ast (2.4.0)
     aws-sdk (2.11.70)
       aws-sdk-resources (= 2.11.70)
     aws-sdk-core (2.11.70)
@@ -67,6 +68,7 @@ GEM
       concurrent-ruby (~> 1.0)
     ine-places (0.2.0)
       activesupport (>= 4.2)
+    jaro_winkler (1.5.1)
     jmespath (1.4.0)
     loofah (2.2.2)
       crass (~> 1.0.2)
@@ -78,7 +80,11 @@ GEM
     nokogiri (1.8.3)
       mini_portile2 (~> 2.3.0)
     oj (3.6.2)
+    parallel (1.12.1)
+    parser (2.5.1.2)
+      ast (~> 2.4.0)
     patron (0.13.1)
+    powerpack (0.1.2)
     rack (2.0.5)
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
@@ -87,11 +93,22 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.0.4)
       loofah (~> 2.2, >= 2.2.2)
+    rainbow (3.0.0)
+    rubocop (0.59.2)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.5, != 2.5.1.1)
+      powerpack (~> 0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-prof (0.17.0)
+    ruby-progressbar (1.10.0)
     sequel (5.9.0)
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    unicode-display_width (1.4.0)
 
 PLATFORMS
   ruby
@@ -99,6 +116,8 @@ PLATFORMS
 DEPENDENCIES
   byebug
   gobierto_data!
+  nokogiri
+  rubocop
 
 BUNDLED WITH
    1.16.3
