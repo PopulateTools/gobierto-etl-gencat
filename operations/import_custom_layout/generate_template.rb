@@ -38,18 +38,18 @@ puts "[START] custom_layout/generate_template.rb with input_file_path=#{input_fi
 
 layout_page = Nokogiri::HTML(open(input_file_path))
 
-# 1. Insert locale attribute:
+# Insert locale attribute:
 #
-#      <html lang="{% i18n_locale %}">
+#  <html lang="{% i18n_locale %}">
 
 html_tag = layout_page.xpath("//html").first
 html_tag["lang"] = "{% i18n_locale %}"
 
-# 2. Insert gobierto_head right after the viewport meta tag:
+# Insert gobierto_head right after the viewport meta tag:
 #
-#    <head>
-#      <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-#        {% render_partial 'layouts/gobierto_head' %}
+#   <head>
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+#       {% render_partial 'layouts/gobierto_head' %}
 
 viewport_meta_tag = layout_page.xpath("//meta[@name='viewport']").first
 text_node = Nokogiri::XML::Text.new(
@@ -58,23 +58,23 @@ text_node = Nokogiri::XML::Text.new(
 )
 viewport_meta_tag.after(text_node)
 
-# 3. Add custom attributes to body tag:
+# Add custom attributes to body tag:
 #
-#      <body class="{% body_css_classes %}" {% yield body_attributes %}>
+#   <body class="{% body_css_classes %}" {% yield body_attributes %}>
 
 body_tag = layout_page.xpath("//body").first
 body_tag["class"] = "{% body_css_classes %}"
 
 body_tag["{% yield body_attributes %}"] = FAKE_ATTRIBUTE_VALUE
 
-# 4. Add theme-gencat class to main article and add inner content
+# Add theme-gencat class to main article and add inner content
 #
-#     <section class="padding-xs padding-sm padding-md colorSectionOdd">
-#       <article class="container fullcontainer-xs theme-gencat">
-#         {% render_partial "user/shared/flash_messages" %}
-#         {{ content_for_layout }}
-#       </article>
-#     </section>
+#   <section class="padding-xs padding-sm padding-md colorSectionOdd">
+#     <article class="container fullcontainer-xs theme-gencat">
+#       {% render_partial "user/shared/flash_messages" %}
+#       {{ content_for_layout }}
+#     </article>
+#   </section>
 
 main_article_tag = layout_page.xpath("//article").first
 main_article_tag["class"] = "#{main_article_tag["class"]} theme-gencat"
@@ -85,36 +85,48 @@ text_node = Nokogiri::XML::Text.new(
 )
 main_article_tag.add_child(text_node)
 
-# 5. Insert gobierto_footer right before body ending
+# Insert gobierto_footer right before body ending
 #
-#        {% render_partial 'layouts/gobierto_footer' %}
-#      </body>
-#    </html>
+#      {% render_partial 'layouts/gobierto_footer' %}
+#    </body>
+#  </html>
 
 body_tag = layout_page.xpath("//body").first
 text_node = Nokogiri::XML::Text.new("{% render_partial 'layouts/gobierto_footer' %}", layout_page)
 body_tag.add_child(text_node)
 
-# 6. Insert temporary tag to be replaced with the styles overries later on
+# Insert temporary tag to be replaced with the styles overries later on
 
 styles_node = Nokogiri::XML::Text.new(GOBIERTO_STYLES_OVERRIDES_LOCATOR, layout_page)
 head_tag = layout_page.xpath("//head").first
 head_tag.add_child(styles_node)
 
-# 7. Remove placeholder node attribute values
+# Insert temporary tag to be replaced with the locales switcher later on
+
+tmp_text_node = Nokogiri::XML::Text.new("LOCALES_SWITCHER", layout_page)
+locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").first
+locales_swithcer_node.children.remove()
+locales_swithcer_node.add_child(tmp_text_node)
+
+# Remove placeholder node attribute values
 
 layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 
-# 8. Replace HTTP assets per HTTPs
+# Replace HTTP assets per HTTPs
 
 layout_string = layout_string.gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 
-# 9. Replace custom styles locator with real content
+# Replace custom styles locator with real content
 
-styles_string = File.read("#{File.dirname(__FILE__)}/gobierto_styles_overrides.html").to_s
-layout_string = layout_string.gsub(GOBIERTO_STYLES_OVERRIDES_LOCATOR, styles_string)
+styles_content = File.read("#{File.dirname(__FILE__)}/gobierto_styles_overrides.html")
+layout_string = layout_string.gsub(GOBIERTO_STYLES_OVERRIDES_LOCATOR, styles_content)
 
-# 10. Write output file
+# Replace locale switchers locator with real content
+
+locales_content = File.read("#{File.dirname(__FILE__)}/locales_switcher.html")
+layout_string = layout_string.gsub("LOCALES_SWITCHER", locales_content)
+
+# Write output file
 
 File.write(output_file_path, layout_string)
 
