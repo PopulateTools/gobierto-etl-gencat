@@ -19,7 +19,8 @@ pipeline {
         }
         stage('Transform > Add custom tags to layout') {
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/import_custom_layout/generate_template.rb ${STORAGE_DIR}/layouts_application.html ${STORAGE_DIR}/layouts_application.html.erb"
+                sh "cd ${GENCAT_ETL}; ruby operations/import_custom_layout/generate_template.rb ${STORAGE_DIR}/downloaded_layout_es.html ${STORAGE_DIR}/layouts_application_es.html.erb"
+                sh "cd ${GENCAT_ETL}; ruby operations/import_custom_layout/generate_template.rb ${STORAGE_DIR}/downloaded_layout_ca.html ${STORAGE_DIR}/layouts_application_ca.html.erb"
             }
         }
         stage('Load > Save as site template') {
