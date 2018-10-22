@@ -31,11 +31,6 @@ pipeline {
                 sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'gencat/gobierto_people/datasets/trips.csv' /tmp/gencat/downloads/datasets"
             }
         }
-        stage('Transform > Download file of confict names resolutions') {
-            steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'gencat/gobierto_people/names_conflict_resolutions.yml' /tmp/gencat/downloads"
-            }
-        }
         stage('Transform & Load > Process resources') {
             steps {
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv ${GENCAT_SITE_DOMAIN}"

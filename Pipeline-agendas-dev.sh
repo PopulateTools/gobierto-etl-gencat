@@ -18,9 +18,6 @@ while read args; do
 done < /tmp/gencat/datasets_for_extraction
 cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "gencat/gobierto_people/datasets/trips.csv" /tmp/gencat/downloads/datasets
 
-# Transform > Download file of confict names resolutions
-cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "gencat/gobierto_people/names_conflict_resolutions.yml" /tmp/gencat/downloads
-
 # Transform & Load > Process resources
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv $GENCAT_SITE_DOMAIN
