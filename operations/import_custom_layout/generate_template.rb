@@ -11,6 +11,7 @@ FAKE_ATTRIBUTE_REGEX = /=\"#{FAKE_ATTRIBUTE_VALUE}\"/
 ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat/web/resources"
 ASSETS_HTTPS_LOCATION = "https://web.gencat.cat/web/resources"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
+GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
 
 # Description:
 #
@@ -105,7 +106,7 @@ head_tag.add_child(styles_node)
 
 tmp_text_node = Nokogiri::XML::Text.new("LOCALES_SWITCHER", layout_page)
 locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").first
-locales_swithcer_node.children.remove()
+locales_swithcer_node.children.remove
 locales_swithcer_node.add_child(tmp_text_node)
 
 # Remove placeholder node attribute values
@@ -114,17 +115,21 @@ layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 
 # Replace HTTP assets per HTTPs
 
-layout_string = layout_string.gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+layout_string.gsub!(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 
 # Replace custom styles locator with real content
 
 styles_content = File.read("#{File.dirname(__FILE__)}/gobierto_styles_overrides.html")
-layout_string = layout_string.gsub(GOBIERTO_STYLES_OVERRIDES_LOCATOR, styles_content)
+layout_string.gsub!(GOBIERTO_STYLES_OVERRIDES_LOCATOR, styles_content)
 
 # Replace locale switchers locator with real content
 
 locales_content = File.read("#{File.dirname(__FILE__)}/locales_switcher.html")
-layout_string = layout_string.gsub("LOCALES_SWITCHER", locales_content)
+layout_string.gsub!("LOCALES_SWITCHER", locales_content)
+
+# Remove Google Translate script
+
+layout_string.gsub!(GOOGLE_TRANSLATE_SCRIPT_REGEX, "")
 
 # Write output file
 
