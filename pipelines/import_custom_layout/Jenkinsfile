@@ -6,6 +6,7 @@ pipeline {
         GENCAT_ETL = "/var/www/gobierto-etl-gencat/current"
         STORAGE_DIR = "/var/lib/jenkins/jobs/gobierto-etl-gencat\\ layout/builds/${env.BUILD_NUMBER}"
         LAYOUT_LOCATION = "http://governobert.gencat.cat/templates?mode=html&code=GOOB0001"
+        LOCALES = "ca es"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current"
         // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
@@ -13,7 +14,7 @@ pipeline {
     stages {
         stage('Extract > Download layout') {
             steps {
-               sh "wget -O ${STORAGE_DIR}/layouts_application.html '${LAYOUT_LOCATION}'"
+                sh "cd ${GENCAT_ETL}; ruby operations/import_custom_layout/download_layout.rb ${STORAGE_DIR} '${LAYOUT_LOCATION}' '${LOCALES}'"
             }
         }
         stage('Transform > Add custom tags to layout') {
