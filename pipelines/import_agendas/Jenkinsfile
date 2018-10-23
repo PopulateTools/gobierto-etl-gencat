@@ -8,16 +8,17 @@ pipeline {
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/currentt"
         // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
+        // RAILS_ENV = "production"
     }
     stages {
         stage('Extract > Download last start query date') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'gencat/gobierto_people/last_execution/last_start_query_date.txt' /tmp/gencat/downloads"
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'gencat/gobierto_people/last_execution/last_start_query_date-${RAILS_ENV}.txt' /tmp/gencat/downloads"
             }
         }
         stage('Extract > Check data presence') {
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb all"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all"
             }
         }
         stage('Extract > Clean previous downloads') {
@@ -41,7 +42,7 @@ pipeline {
         }
         stage('Documentation > Upload last execution date') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt 'gencat/gobierto_people/last_execution/last_start_query_date.txt'"
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt 'gencat/gobierto_people/last_execution/last_start_query_date-${RAILS_ENV}.txt'"
             }
         }
     }
