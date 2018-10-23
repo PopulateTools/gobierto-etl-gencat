@@ -13,32 +13,34 @@ require_relative "../../../utils/local_storage"
 #  is not present
 #
 # Arguments:
-#  - 0: Dataset. Required. Options events, gifts, invitations or all
-#  - 1: Start Date. Optional. If blank the start date will use the last
+#  - 0: Rails env
+#  - 1: Dataset. Required. Options events, gifts, invitations or all
+#  - 2: Start Date. Optional. If blank the start date will use the last
 #       execution date if existed
-#  - 2: End Date. Optional
+#  - 3: End Date. Optional
 #
 # Samples:
 #
-#   /path/to/project/operations/gobierto_people/check-data-presence/run.rb gifts 2018-06-01 2018-07-01
+#   /path/to/project/operations/gobierto_people/check-data-presence/run.rb staging gifts 2018-06-01 2018-07-01
 #
 
 valid_datasets = Utils::OriginDataset.valid_datasets
 dataset_opts = valid_datasets + [:all]
 
-if ARGV.length < 1
-  raise "Dataset argument is required. Options: #{ dataset_opts.join("|") }"
+if ARGV.length < 2
+  raise "Rails env and dataset argument are required. Options: #{ dataset_opts.join("|") }"
 end
 
-if !dataset_opts.include? ARGV[0].to_sym
+if !dataset_opts.include? ARGV[1].to_sym
   raise "Invalid dataset argument. Options: #{ dataset_opts.join("|") }"
 end
 
-datasets = ARGV[0] == "all" ? valid_datasets : [ARGV[0].to_sym]
-start_date = ARGV[1] ? DateTime.parse(ARGV[1]) : nil
-end_date = ARGV[2] ? DateTime.parse(ARGV[2]) : nil
+rails_env = ARGV[0]
+datasets = ARGV[1] == "all" ? valid_datasets : [ARGV[1].to_sym]
+start_date = ARGV[2] ? DateTime.parse(ARGV[2]) : nil
+end_date = ARGV[3] ? DateTime.parse(ARGV[3]) : nil
 
-last_execution = Utils::LocalStorage.new(path: "downloads/last_start_query_date.txt")
+last_execution = Utils::LocalStorage.new(path: "downloads/last_start_query_date-#{rails_env}.txt")
 if start_date.blank? && last_execution.exist?
   start_date = DateTime.parse(last_execution.content)
 end
