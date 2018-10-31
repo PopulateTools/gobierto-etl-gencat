@@ -10,7 +10,6 @@ module Utils
     attr_accessor :similarities_with_existing_people
 
     def initialize(opts = {})
-      @last_positions = {}
       @similarities_with_existing_people = {}
       @site = opts[:site]
       @errors = []
@@ -71,7 +70,9 @@ module Utils
     end
 
     def update_last_position(person, position)
-      @last_positions[person.id] = position if @last_positions[person.id] != position
+      return if person.charge_translations[:ca] == position
+
+      person.update_attribute(:charge_translations, { ca: position })
     end
 
     def merge_persons(destination, origin)
