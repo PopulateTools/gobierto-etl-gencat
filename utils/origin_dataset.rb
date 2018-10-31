@@ -33,7 +33,13 @@ module Utils
     end
 
     def sort_condition
-      "$order=:id"
+      if [:events, :gifts].include?(@dataset)
+        "$order=data ASC"
+      elsif @dataset == :invitations
+        "$order=data_inici ASC"
+      else
+        raise StandardError, "Unknown sort condition for this dataset"
+      end
     end
 
     def select_condition
