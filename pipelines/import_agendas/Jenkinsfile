@@ -34,10 +34,10 @@ pipeline {
         }
         stage('Transform & Load > Process resources') {
             steps {
-                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv ${GENCAT_SITE_DOMAIN}"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-events/run.rb downloads/datasets/events.csv ${GENCAT_SITE_DOMAIN}"
             }
         }
         stage('Documentation > Upload last execution date') {
