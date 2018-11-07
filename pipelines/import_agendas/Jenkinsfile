@@ -19,17 +19,21 @@ pipeline {
         }
         stage('Extract > Clear previous data') {
             steps {
-                if (${CLEAR_PREVIOUS_DATA}=='true') {
-                    sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/clear-previous-data/run.rb ${GENCAT_SITE_DOMAIN}"
+                script {
+                    if (${CLEAR_PREVIOUS_DATA}=='true') {
+                        sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/clear-previous-data/run.rb ${GENCAT_SITE_DOMAIN}"
+                    }
                 }
             }
         }
         stage('Extract > Check data presence') {
             steps {
-                if (${CLEAR_PREVIOUS_DATA}=='true') {
-                    sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all forever"
-                } else {
-                    sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all"
+                script {
+                    if (${CLEAR_PREVIOUS_DATA}=='true') {
+                        sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all forever"
+                    } else {
+                        sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all"
+                    }
                 }
             }
         }
