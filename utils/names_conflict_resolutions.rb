@@ -36,8 +36,8 @@ NAMES_CONFLICT_RESOLUTIONS = {
     "Carles Mundó i Blanc"
   ],
   "Joaquim Torra i Pla" => [],
-  "Annabel Marcos" => [
-    "Annabel Marcos i Vilar"
+  "Annabel Marcos i Vilar" => [
+    "Annabel Marcos"
   ],
   "Meritxell Borràs Solé" => []
 }.freeze
