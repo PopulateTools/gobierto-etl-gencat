@@ -56,7 +56,7 @@ module Utils
         matching_people = dictionary[person.name].map { |name| @site.people.find_by_name(name) }.compact
         if matching_people.present?
           if person.new_record?
-            person_attrs = person.attributes.except("id", "created_at", "updated_at")
+            person_attrs = person.attributes.except("id", "created_at", "updated_at", "slug", "position")
             person = matching_people.shift
             person.update(person_attrs)
           end

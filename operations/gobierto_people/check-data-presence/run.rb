@@ -15,9 +15,10 @@ require_relative "../../../utils/local_storage"
 # Arguments:
 #  - 0: Rails env
 #  - 1: Dataset. Required. Options events, gifts, invitations or all
-#  - 2: Start Date. Optional. If blank the start date will use the last
+#  - 2: Start Date. Optional. If value is "forever", data of any time
+#       is requested. If blank the start date will use the last
 #       execution date if existed
-#  - 3: End Date. Optional
+#  - 3: End Date. Optional. Ignored if previous argument is "forever"
 #
 # Samples:
 #
@@ -37,12 +38,16 @@ end
 
 rails_env = ARGV[0]
 datasets = ARGV[1] == "all" ? valid_datasets : [ARGV[1].to_sym]
-start_date = ARGV[2] ? DateTime.parse(ARGV[2]) : nil
-end_date = ARGV[3] ? DateTime.parse(ARGV[3]) : nil
 
-last_execution = Utils::LocalStorage.new(path: "downloads/last_start_query_date-#{rails_env}.txt")
-if start_date.blank? && last_execution.exist?
-  start_date = DateTime.parse(last_execution.content)
+start_date = end_date = nil
+unless ARGV[2] == "forever"
+  start_date = DateTime.parse(ARGV[2]) if ARGV[2]
+  end_date = DateTime.parse(ARGV[3]) if ARGV[3]
+
+  last_execution = Utils::LocalStorage.new(path: "downloads/last_start_query_date-#{rails_env}.txt")
+  if start_date.blank? && last_execution.exist?
+    start_date = DateTime.parse(last_execution.content)
+  end
 end
 
 puts "[START] check-data-presence/run.rb with datasets=#{ datasets.join(", ") }, start_date=#{ start_date }, end_date=#{ end_date }"

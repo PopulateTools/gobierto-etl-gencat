@@ -38,6 +38,7 @@ module Utils
                          title_translations: { "ca" => row.cleaned_text("tema") },
                          site_id: @site.id,
                          person_id: person.id,
+                         slug: row[":id"],
                          meta: { "type" => row.cleaned_text("activitat") },
                          state: GobiertoCalendars::Event.states[:published],
                          department_id: department.id,
