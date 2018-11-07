@@ -20,7 +20,7 @@ pipeline {
         stage('Extract > Clear previous data') {
             when { expression { env.CLEAR_PREVIOUS_DATA == 'true' } }
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/clear-previous-data/run.rb ${GENCAT_SITE_DOMAIN}"
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/clear-previous-data/run.rb ${GENCAT_SITE_DOMAIN}"
             }
         }
         stage('Extract > Check data presence of any time') {
