@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GENCAT_SITE_DOMAIN="gencat.gobierto.test"
-CLEAR_PREVIOUS_DATA=true
+CLEAR_PREVIOUS_DATA="True"
 RAILS_ENV="development"
 
 # Extract > Download last start query date
