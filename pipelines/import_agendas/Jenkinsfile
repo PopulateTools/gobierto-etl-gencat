@@ -9,7 +9,7 @@ pipeline {
         // GOBIERTO = "/var/www/gobierto/currentt"
         // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
         // RAILS_ENV = "production"
-        // CLEAR_PREVIOUS_DATA = false
+        // CLEAR_PREVIOUS_DATA = "True" or "False" (it must be a string with the boolean values from Python)
     }
     stages {
         stage('Extract > Download last start query date') {
@@ -57,6 +57,11 @@ pipeline {
         stage('Documentation > Upload last execution date') {
             steps {
                 sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt 'gencat/gobierto_people/last_execution/last_start_query_date-${RAILS_ENV}.txt'"
+            }
+        }
+        stage('Clear cache') {
+            steps {
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/clear-cache/run.rb"
             }
         }
     }
