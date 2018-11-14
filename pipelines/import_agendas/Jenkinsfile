@@ -61,7 +61,7 @@ pipeline {
         }
         stage('Clear cache') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/clear-cache/run.rb"
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/gobierto/clear-cache/run.rb"
             }
         }
     }
