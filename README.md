@@ -16,3 +16,5 @@ This repository relies heavily in [gobierto_data](https://github.com/PopulateToo
 - import-gifts
 - import-invitations
 - import-trips
+- clear-previous-data
+- import_custom_layout
