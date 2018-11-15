@@ -9,7 +9,7 @@ pipeline {
         // GOBIERTO = "/var/www/gobierto/currentt"
         // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
         // RAILS_ENV = "production"
-        // CLEAR_PREVIOUS_DATA = false
+        // CLEAR_PREVIOUS_DATA = "True" or "False" (it must be a string with the boolean values from Python)
     }
     stages {
         stage('Extract > Download last start query date') {
@@ -18,19 +18,19 @@ pipeline {
             }
         }
         stage('Extract > Clear previous data') {
-            when { expression { env.CLEAR_PREVIOUS_DATA == 'true' } }
+            when { expression { env.CLEAR_PREVIOUS_DATA == 'True' } }
             steps {
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/clear-previous-data/run.rb ${GENCAT_SITE_DOMAIN}"
             }
         }
         stage('Extract > Check data presence of any time') {
-            when { expression { env.CLEAR_PREVIOUS_DATA == 'true' } }
+            when { expression { env.CLEAR_PREVIOUS_DATA == 'True' } }
             steps {
                 sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all forever"
             }
         }
         stage('Extract > Check data presence since last build') {
-            when { expression { env.CLEAR_PREVIOUS_DATA != 'true' } }
+            when { expression { env.CLEAR_PREVIOUS_DATA != 'True' } }
             steps {
                 sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all"
             }
@@ -57,6 +57,11 @@ pipeline {
         stage('Documentation > Upload last execution date') {
             steps {
                 sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt 'gencat/gobierto_people/last_execution/last_start_query_date-${RAILS_ENV}.txt'"
+            }
+        }
+        stage('Clear cache') {
+            steps {
+                sh "cd ${GOBIERTO}; bin/rails runner ${GOBIERTO_ETL_UTILS}/operations/gobierto/clear-cache/run.rb"
             }
         }
     }

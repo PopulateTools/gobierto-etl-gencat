@@ -1,7 +1,7 @@
 #!/bin/bash
 
 GENCAT_SITE_DOMAIN="gencat.gobierto.test"
-CLEAR_PREVIOUS_DATA=true
+CLEAR_PREVIOUS_DATA="True"
 RAILS_ENV="development"
 
 # Extract > Download last start query date
@@ -37,3 +37,6 @@ cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/
 
 # Documentation > Upload last execution date
 cd $DEV_DIR/gobierto-etl-utils/; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt "gencat/gobierto_people/last_execution/last_start_query_date-$RAILS_ENV.txt"
+
+# Clear cache
+cd $DEV_DIR/gobierto-etl-utils/; ruby operations/gobierto/clear-cache/run.rb
