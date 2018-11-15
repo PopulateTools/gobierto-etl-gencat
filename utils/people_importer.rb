@@ -19,10 +19,11 @@ module Utils
       puts "\n\n===================================="
       puts     "=========== Import Person ==========="
       puts "Processing #{ attributes.values.join(", ") }...\n\n"
-      name = resolve_name_similarities(attributes[:name])
-      person = find_or_initialize_person(name, attributes[:position])
+      # name = resolve_name_similarities(attributes[:name])
+      person = find_or_initialize_person(attributes[:name], attributes[:position])
       if person.new_record?
-        person = merge_duplicates(person)
+        # person = merge_duplicates(person)
+        save_new(person)
       else
         update_last_position(person, attributes[:position])
       end
