@@ -105,9 +105,10 @@ head_tag.add_child(styles_node)
 # Insert temporary tag to be replaced with the locales switcher later on
 
 tmp_text_node = Nokogiri::XML::Text.new("LOCALES_SWITCHER", layout_page)
-locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").first
-locales_swithcer_node.children.remove
-locales_swithcer_node.add_child(tmp_text_node)
+if locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").first
+  locales_swithcer_node.children.remove
+  locales_swithcer_node.add_child(tmp_text_node)
+end
 
 # Remove placeholder node attribute values
 
