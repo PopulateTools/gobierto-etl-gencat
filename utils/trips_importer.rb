@@ -23,7 +23,7 @@ module Utils
         )
         department = @department_importer.import!(
           attributes: {
-            name: row.cleaned_text("Department")
+            name: row.cleaned_text("Departament")
           }
         )
 
