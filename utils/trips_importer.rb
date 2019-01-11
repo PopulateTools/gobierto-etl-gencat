@@ -23,7 +23,7 @@ module Utils
         )
         department = @department_importer.import!(
           attributes: {
-            name: row.cleaned_text("department")
+            name: row.cleaned_text("Department")
           }
         )
 
@@ -36,7 +36,7 @@ module Utils
                            row.locations_list("Destinació")
                          end
           @trip_importer.import!(
-            attributes: { external_id: row["row"] },
+            attributes: { external_id: row["Id"] },
             extra: { person_id: person.id,
                      title: row.cleaned_text("Motiu"),
                      description: row.cleaned_text("Agenda"),
@@ -47,7 +47,7 @@ module Utils
                      meta: { "purpose" => row.raw_text("Motiu"),
                              "company" => row.raw_text("Comitiva"),
                              "food_expenses" => row.economic_amount("Dietes y manutenció"),
-                             "accomodation_expenses" => row.economic_amount("Hotels i allotjament"),
+                             "accomodation_expenses" => row.economic_amount("Allotjament"),
                              "transport_expenses" => row.economic_amount("Transport"),
                              "other_expenses" => row.economic_amount("Altres despeses"),
                              "total_expenses" => row.economic_amount("Total despeses"),
