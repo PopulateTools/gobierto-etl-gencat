@@ -78,7 +78,7 @@ body_tag["{% yield body_attributes %}"] = FAKE_ATTRIBUTE_VALUE
 #   </section>
 
 main_article_tag = layout_page.xpath("//article").first
-main_article_tag["class"] = "#{main_article_tag["class"]} theme-gencat"
+main_article_tag["class"] = "#{main_article_tag["class"]} theme-gencat no-fullcontainer-xs"
 
 text_node = Nokogiri::XML::Text.new(
   "{% render_partial 'user/shared/flash_messages' %}{{ content_for_layout }}",
