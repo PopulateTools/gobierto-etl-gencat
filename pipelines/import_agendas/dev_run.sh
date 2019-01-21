@@ -27,7 +27,6 @@ cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/clear-path/run
 while read args; do
   cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download/run.rb $args
 done < /tmp/gencat/datasets_for_extraction
-cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "gencat/gobierto_people/datasets/trips.csv" /tmp/gencat/downloads/datasets
 
 # Transform & Load > Process resources
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv $GENCAT_SITE_DOMAIN
