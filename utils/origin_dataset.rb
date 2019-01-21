@@ -34,7 +34,7 @@ module Utils
     end
 
     def sort_condition
-      if [:events, :gifts, :trips].include?(@dataset)
+      if [:events, :gifts].include?(@dataset)
         "$order=data ASC"
       elsif @dataset == :invitations
         "$order=data_inici ASC"
