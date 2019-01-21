@@ -43,7 +43,6 @@ pipeline {
         stage('Extract > Download data') {
             steps {
                 sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/download-s3/run.rb 'gencat/gobierto_people/datasets/trips.csv' /tmp/gencat/downloads/datasets"
             }
         }
         stage('Transform & Load > Process resources') {

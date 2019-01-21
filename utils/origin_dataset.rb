@@ -7,7 +7,8 @@ module Utils
   class OriginDataset
     DATASET_IDS = { events: "4npk-u4e8",
                     gifts: "t4qw-gx3q",
-                    invitations: "na9g-qaxb" }
+                    invitations: "na9g-qaxb",
+                    trips: "5kte-hque" }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
 
     def self.valid_datasets
