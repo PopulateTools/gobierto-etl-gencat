@@ -8,7 +8,7 @@ module Utils
     DATASET_IDS = { events: "4npk-u4e8",
                     gifts: "t4qw-gx3q",
                     invitations: "na9g-qaxb",
-                    trips: "5kte-hque" }
+                    trips: "4ngp-d7x6" }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
 
     def self.valid_datasets
@@ -34,10 +34,12 @@ module Utils
     end
 
     def sort_condition
-      if [:events, :gifts].include?(@dataset)
+      if [:events, :gifts, :trips].include?(@dataset)
         "$order=data ASC"
       elsif @dataset == :invitations
         "$order=data_inici ASC"
+      elsif @dataset == :trips
+        "$order=Id ASC"
       else
         raise StandardError, "Unknown sort condition for this dataset"
       end
