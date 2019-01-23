@@ -56,7 +56,7 @@ pipeline {
         stage('Transform & Load > Upload trips to S3 for CARTO') {
             steps {
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/export-trips/run.rb ${GENCAT_SITE_DOMAIN} gencat_trips_${RAILS_ENV}.csv"
-                sh "cd ${GOBIERTO_ETL_UTILS}/; ruby operations/upload-s3/run.rb $WORKING_DIR/gencat_trips_${RAILS_ENV}.csv gencat/gobierto_people/gencat_trips_${RAILS_ENV}.csv"
+                sh "cd ${GOBIERTO_ETL_UTILS}/; ruby operations/upload-s3/run.rb /tmp/gencat/gencat_trips_${RAILS_ENV}.csv gencat/gobierto_people/gencat_trips_${RAILS_ENV}.csv"
             }
         }
         stage('Documentation > Upload last execution date') {
