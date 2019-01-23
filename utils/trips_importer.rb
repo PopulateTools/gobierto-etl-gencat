@@ -33,7 +33,7 @@ module Utils
           destinations = if trips_with_destinations.exists?
                            trips_with_destinations.first.destinations_meta
                          else
-                           row.locations_list("destinació")
+                           row.locations_list("destinaci")
                          end
           @trip_importer.import!(
             attributes: { external_id: row[":id"] },
