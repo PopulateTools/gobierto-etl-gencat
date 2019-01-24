@@ -12,6 +12,9 @@ ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat"
 ASSETS_HTTPS_LOCATION = "https://web.gencat.cat"
 WEB_HTTP_LOCATION = "http://web.gencat.cat"
 WEB_HTTPS_LOCATION = "https://web.gencat.cat"
+SEARCH_BAD_CA="https://web.gencat.cat/ca/cercador/"
+SEARCH_BAD_ES="https://web.gencat.cat/es/cercador/"
+SEARCH_GOOD="/cercadorGencat"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
 
@@ -120,6 +123,8 @@ layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 
 layout_string.gsub!(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 layout_string.gsub!(WEB_HTTP_LOCATION, WEB_HTTPS_LOCATION)
+layout_string.gsub!(SEARCH_BAD_CA, SEARCH_GOOD)
+layout_string.gsub!(SEARCH_BAD_ES, SEARCH_GOOD)
 
 # Replace custom styles locator with real content
 
