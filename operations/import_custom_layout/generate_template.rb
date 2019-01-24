@@ -8,8 +8,10 @@ require "nokogiri"
 
 FAKE_ATTRIBUTE_VALUE = "REMOVE_ME"
 FAKE_ATTRIBUTE_REGEX = /=\"#{FAKE_ATTRIBUTE_VALUE}\"/
-ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat/web/resources"
-ASSETS_HTTPS_LOCATION = "https://web.gencat.cat/web/resources"
+ASSETS_HTTP_LOCATION = "http://governobert.gencat.cat"
+ASSETS_HTTPS_LOCATION = "https://web.gencat.cat"
+WEB_HTTP_LOCATION = "http://web.gencat.cat"
+WEB_HTTPS_LOCATION = "https://web.gencat.cat"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
 
@@ -117,6 +119,7 @@ layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 # Replace HTTP assets per HTTPs
 
 layout_string.gsub!(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+layout_string.gsub!(WEB_HTTP_LOCATION, WEB_HTTPS_LOCATION)
 
 # Replace custom styles locator with real content
 
