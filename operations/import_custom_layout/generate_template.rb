@@ -18,6 +18,13 @@ SEARCH_GOOD="https://web.gencat.cat/cercadorGencat"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
 
+def remove_default_page_header!(layout_page)
+  header_tag = layout_page.xpath("//h1[@class='titulo-capcalera']").first
+  header_tag.children.remove
+  fixed_node = Nokogiri::XML::Node.new("span", layout_page)
+  header_tag.add_child(fixed_node)
+end
+
 # Description:
 #
 #  Takes as input the HTML template as downloaded from Gencat and converts it into an ERB,
@@ -114,6 +121,8 @@ if locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").
   locales_swithcer_node.children.remove
   locales_swithcer_node.add_child(tmp_text_node)
 end
+
+remove_default_page_header!(layout_page)
 
 # Remove placeholder node attribute values
 
