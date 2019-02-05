@@ -17,14 +17,14 @@ module Utils
 
     def location(attribute)
       location_name = cleaned_text(attribute)
-      location_search_results = Geocoder.search(location_name)
-      location = location_search_results.first
+      location = single_location_search(location_name)
       destination_object(location, location_name)
     end
 
     def locations_list(attribute)
       location_name = cleaned_text(attribute)
       location_search_results = Geocoder.search(location_name)
+      location_search_results = [single_location_search(location_name)] unless location_search_results.count > 1
       {
         "destinations" => location_search_results.map do |result|
           destination_object(result, location_name)
@@ -49,6 +49,27 @@ module Utils
     end
 
     private
+
+    LOCALITY_TYPES = %w(political locality).freeze
+
+    def geocoder_single_search(name, locality_postfix = nil)
+      name = "#{ name }, #{ locality_postfix }" if locality_postfix
+      results = Geocoder.search(name)
+      location = results.first
+    end
+
+    def single_location_search(name)
+      location = geocoder_single_search(name)
+
+      unless location&.types&.any? { |type_name| LOCALITY_TYPES.include?(type_name) }
+        LOCALITY_TYPES.each do |type|
+          location = geocoder_single_search(name, type)
+          break if location && location.types.any? { |type_name| LOCALITY_TYPES.include?(type_name) }
+        end
+      end
+
+      location
+    end
 
     def destination_object(location, location_name)
       {
