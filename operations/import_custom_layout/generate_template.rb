@@ -122,18 +122,26 @@ if locales_swithcer_node = layout_page.xpath("//*[contains(@class, 'idioma')]").
   locales_swithcer_node.add_child(tmp_text_node)
 end
 
+# Replace HTTP assets per HTTPs
+layout_page.xpath("//script[contains(@src, '#{ASSETS_HTTP_LOCATION}')]").each do |node|
+  node['src'] = node['src'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+end
+
+layout_page.xpath("//img[contains(@src, '#{ASSETS_HTTP_LOCATION}')]").each do |node|
+  node['src'] = node['src'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+end
+
+layout_page.xpath("//link[contains(@href, '#{ASSETS_HTTP_LOCATION}')]").each do |node|
+  node['href'] = node['href'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
+end
+
+# Remove default page header
 remove_default_page_header!(layout_page)
 
 # Remove placeholder node attribute values
-
 layout_string = layout_page.to_s.gsub(FAKE_ATTRIBUTE_REGEX, "")
 
-# Replace HTTP assets per HTTPs
-
-layout_string.gsub!(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
-# Exception to assets
-layout_string.gsub!("https://web.gencat.cat/es/transparencia/Funcio-publica/direccio-publica/", "http://governobert.gencat.cat/es/transparencia/Funcio-publica/direccio-publica/")
-layout_string.gsub!("https://web.gencat.cat/ca/transparencia/Funcio-publica/direccio-publica/", "http://governobert.gencat.cat/ca/transparencia/Funcio-publica/direccio-publica/")
+# Fix some
 layout_string.gsub!(WEB_HTTP_LOCATION, WEB_HTTPS_LOCATION)
 layout_string.gsub!(SEARCH_BAD_CA, SEARCH_GOOD)
 layout_string.gsub!(SEARCH_BAD_ES, SEARCH_GOOD)
