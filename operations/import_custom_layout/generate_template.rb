@@ -17,6 +17,9 @@ SEARCH_BAD_ES="https://web.gencat.cat/es/cercador/"
 SEARCH_GOOD="https://web.gencat.cat/cercadorGencat"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
+INSECURE_ASSETS = [
+  "http://web.gencat.cat/web/sites/governobert/.content/00_Home/faldo/imatge_FEDER.png"
+]
 
 def remove_default_page_header!(layout_page)
   header_tag = layout_page.xpath("//h1[@class='titulo-capcalera']").first
@@ -128,6 +131,8 @@ layout_page.xpath("//script[contains(@src, '#{ASSETS_HTTP_LOCATION}')]").each do
 end
 
 layout_page.xpath("//img[contains(@src, '#{ASSETS_HTTP_LOCATION}')]").each do |node|
+  next if INSECURE_ASSETS.include?(node['src'])
+
   node['src'] = node['src'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 end
 
