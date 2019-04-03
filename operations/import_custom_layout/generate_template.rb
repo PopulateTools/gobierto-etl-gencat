@@ -18,7 +18,7 @@ SEARCH_GOOD="https://web.gencat.cat/cercadorGencat"
 GOBIERTO_STYLES_OVERRIDES_LOCATOR = "GOBIERTO_STYLES_OVERRIDES"
 GOOGLE_TRANSLATE_SCRIPT_REGEX = /<script.*googleTranslateElementInit\"><\/script>/
 INSECURE_ASSETS = [
-  "http://web.gencat.cat/web/sites/governobert/.content/00_Home/faldo/imatge_FEDER.png"
+  "http://governobert.gencat.cat/web/sites/governobert/.content/00_Home/faldo/imatge_FEDER.png"
 ]
 
 def remove_default_page_header!(layout_page)
