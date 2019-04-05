@@ -28,7 +28,7 @@ module Utils
       {
         "destinations" => location_search_results.map do |result|
           destination_object(result, location_name)
-        end
+        end.compact
       }
     end
 
@@ -72,6 +72,8 @@ module Utils
     end
 
     def destination_object(location, location_name)
+      return nil if location.nil?
+
       {
         "name" => location_name,
         "lat" => location.latitude,
