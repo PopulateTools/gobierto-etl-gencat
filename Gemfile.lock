@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/PopulateTools/gobierto_data.git
-  revision: 814933d614c7fe05ffac21e838d6cf8d0f9531d6
+  revision: 85e850b9d428f0964f42e3eb4b2d4b4864b3de47
   specs:
     gobierto_data (0.1.0)
       actionpack (>= 5.0.0.1)
@@ -36,28 +36,28 @@ GEM
     ansi (1.5.0)
     ast (2.4.0)
     aws-eventstream (1.0.2)
-    aws-sdk (2.11.255)
-      aws-sdk-resources (= 2.11.255)
-    aws-sdk-core (2.11.255)
+    aws-sdk (2.11.260)
+      aws-sdk-resources (= 2.11.260)
+    aws-sdk-core (2.11.260)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.11.255)
-      aws-sdk-core (= 2.11.255)
+    aws-sdk-resources (2.11.260)
+      aws-sdk-core (= 2.11.260)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     builder (3.2.3)
     byebug (11.0.1)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
-    elasticsearch (6.2.0)
-      elasticsearch-api (= 6.2.0)
-      elasticsearch-transport (= 6.2.0)
-    elasticsearch-api (6.2.0)
+    elasticsearch (6.3.0)
+      elasticsearch-api (= 6.3.0)
+      elasticsearch-transport (= 6.3.0)
+    elasticsearch-api (6.3.0)
       multi_json
     elasticsearch-extensions (0.0.31)
       ansi
       elasticsearch
-    elasticsearch-transport (6.2.0)
+    elasticsearch-transport (6.3.0)
       faraday
       multi_json
     erubi (1.8.0)
@@ -78,9 +78,9 @@ GEM
     multipart-post (2.0.0)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
-    oj (3.7.11)
+    oj (3.7.12)
     parallel (1.17.0)
-    parser (2.6.2.0)
+    parser (2.6.2.1)
       ast (~> 2.4.0)
     psych (3.1.0)
     rack (2.0.7)
