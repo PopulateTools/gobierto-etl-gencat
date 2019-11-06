@@ -140,6 +140,9 @@ layout_page.xpath("//link[contains(@href, '#{ASSETS_HTTP_LOCATION}')]").each do 
   node['href'] = node['href'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 end
 
+# Remove navigation button
+layout_page.at("//button[@data-target='#menu_flotant_cont']").remove
+
 # Remove default page header
 remove_default_page_header!(layout_page)
 
