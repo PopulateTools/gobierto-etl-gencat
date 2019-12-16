@@ -3,3 +3,4 @@
 .ruby-gemset
 tmp/*
 !tmp/.keep
+.rubocop-https---raw-githubusercontent-com-PopulateTools-gobierto-master--rubocop-yml
