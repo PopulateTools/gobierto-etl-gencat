@@ -26,8 +26,8 @@ module Utils
       location_search_results = Geocoder.search(location_name)
       location_search_results = [single_location_search(location_name)] unless location_search_results.count > 1
       {
-        "destinations" => location_search_results.map do |result|
-          destination_object(result, location_name)
+        "destinations" => location_search_results.each_with_index.map do |result, idx|
+          destination_object(result, location_name.split("/")[idx].strip)
         end.compact
       }
     end
