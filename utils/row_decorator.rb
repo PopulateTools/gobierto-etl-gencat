@@ -30,6 +30,9 @@ module Utils
           destination_object(result, location_name.split("/")[idx].strip)
         end.compact
       }
+    rescue StandardError => e
+      Rollbar.error("Error parsing trip location: #{location_name} - #{e}")
+      { "destinations" => [] }
     end
 
     def datetime(attribute, fallback: nil)
