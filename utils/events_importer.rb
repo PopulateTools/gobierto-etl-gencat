@@ -69,6 +69,8 @@ module Utils
           @errors << error
         end
         puts "===================================="
+      rescue StandardError => e
+        Rollbar.error(e)
       end
 
       super
