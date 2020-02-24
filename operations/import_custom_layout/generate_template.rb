@@ -143,6 +143,9 @@ end
 # Remove navigation button
 layout_page.at("//button[@data-target='#menu_flotant_cont']").remove
 
+# Remove breadcrumb app root (this is delgated to Rails)
+layout_page.at("//ol[contains(@class, 'breadcrumb')]").xpath("li").last.remove
+
 # Remove default page header
 remove_default_page_header!(layout_page)
 
