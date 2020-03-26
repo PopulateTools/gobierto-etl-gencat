@@ -70,7 +70,7 @@ module Utils
         end
         puts "===================================="
       rescue StandardError => e
-        Rollbar.error(e)
+        Rollbar.error(e, "Error processing row with external_id: #{ row[":id"] }")
       end
 
       super
