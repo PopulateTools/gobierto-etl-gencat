@@ -31,7 +31,6 @@ module Utils
         end.compact
       }
     rescue StandardError => e
-      Rollbar.error("Error parsing trip location: #{location_name} - #{e}")
       { "destinations" => [] }
     end
 
