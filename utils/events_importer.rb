@@ -29,7 +29,7 @@ module Utils
         )
         not_persisted_resources = [person, department, interest_group].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
-          start_date = row.datetime("data")
+          start_date = row.datetime("data") || row.datetime(":created_at") # If data (date) is nil, use the created_at attribute
           start_date = start_date.change(year: row.datetime(":created_at").year) if start_date.year < 2010
           end_date = 1.hour.since(start_date)
           attributes = { external_id: row[":id"],
