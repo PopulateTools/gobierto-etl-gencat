@@ -8,8 +8,10 @@ module Utils
     DATASET_IDS = { events: "4npk-u4e8",
                     gifts: "t4qw-gx3q",
                     invitations: "na9g-qaxb",
-                    trips: "4ngp-d7x6" }
+                    trips: "dze7-9jyh" }
+                    # trips: "4ngp-d7x6" }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
+    TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/api/odata/v4"
 
     def self.valid_datasets
       DATASET_IDS.keys
@@ -20,6 +22,7 @@ module Utils
       @end_date = opts[:end_date]
       @dataset = opts[:dataset]
       @dataset_id = DATASET_IDS[opts[:dataset]]
+      @url = @dataset == :trips ? TEST_URL : URL
     end
 
     def date_interval_condition
@@ -54,7 +57,7 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
-      URI.encode("#{ URL }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
+      URI.encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
