@@ -11,7 +11,7 @@ module Utils
                     trips: "dze7-9jyh" }
                     # trips: "4ngp-d7x6" }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
-    TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/api/odata/v4"
+    TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
 
     def self.valid_datasets
       DATASET_IDS.keys
