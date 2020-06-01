@@ -20,13 +20,8 @@ module Utils
             name: row.cleaned_text("assisteix")
           }
         )
-        department = @department_importer.import!(
-          attributes: {
-            name: row.cleaned_text("departament")
-          }
-        )
 
-        not_persisted_resources = [person, department].select { |resource| resource.new_record? }
+        not_persisted_resources = [person].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
           invitations_with_location = GobiertoPeople::Invitation.where('location @> ?', { name: row.cleaned_text("lloc") }.to_json)
           location = if invitations_with_location.exists?
@@ -42,7 +37,6 @@ module Utils
                      location: location,
                      start_date: row.datetime("data_inici"),
                      end_date: row.datetime("data_fi"),
-                     department_id: department.id,
                      meta: { "organic_unit" => row.cleaned_text("unitat_org_nica"),
                              "expenses_financed_by_organizer" => row.cleaned_list("invitaci_a") } }
           )

@@ -20,13 +20,8 @@ module Utils
             name: row.cleaned_text("nom_i_cognoms")
           }
         )
-        department = @department_importer.import!(
-          attributes: {
-            name: row.cleaned_text("departament")
-          }
-        )
 
-        not_persisted_resources = [person, department].select { |resource| resource.new_record? }
+        not_persisted_resources = [person].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
           trips_with_destinations = GobiertoPeople::Invitation.where('meta @> ?', { original_destinations_attribute: row.cleaned_text("destinaci") }.to_json)
           destinations = if trips_with_destinations.exists?
@@ -42,7 +37,6 @@ module Utils
                      start_date: row.datetime("inici_viatge", fallback: row.datetime("fi_viatge")),
                      end_date: row.datetime("fi_viatge", fallback: row.datetime("inici_viatge")),
                      destinations_meta: destinations,
-                     department_id: department.id,
                      meta: { "purpose" => row.raw_text("motiu"),
                              "company" => row.raw_text("comitiva"),
                              "food_expenses" => row.economic_amount("dietes_i_manutenci"),
