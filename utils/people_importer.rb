@@ -20,13 +20,9 @@ module Utils
       puts     "=========== Import Person ==========="
       puts "Processing #{ attributes.values.join(", ") }...\n\n"
       # name = resolve_name_similarities(attributes[:name])
-      person = find_or_initialize_person(attributes[:name], attributes[:position])
-      if person.new_record?
+      person = find_or_initialize_person(attributes[:name])
         # person = merge_duplicates(person)
-        save_new(person)
-      else
-        update_last_position(person, attributes[:position])
-      end
+      save_new(person) if person.new_record?
       puts "====================================="
       person
     end
@@ -57,7 +53,7 @@ module Utils
         matching_people = dictionary[person.name].map { |name| @site.people.find_by_name(name) }.compact
         if matching_people.present?
           if person.new_record?
-            person_attrs = person.attributes.except("id", "created_at", "updated_at", "slug", "position")
+            person_attrs = person.attributes.except("id", "created_at", "updated_at", "slug")
             person = matching_people.shift
             person.update(person_attrs)
           end
@@ -70,12 +66,6 @@ module Utils
       person
     end
 
-    def update_last_position(person, position)
-      return if person.charge_translations[:ca] == position
-
-      person.update_attribute(:charge_translations, { ca: position })
-    end
-
     def merge_persons(destination, origin)
       return unless origin
       puts "Moving #{ origin.name } data to #{ destination.name }"
@@ -85,7 +75,6 @@ module Utils
 
     def save_new(person)
       if (result = person.save)
-        update_last_position(person, person.charge_translations[:ca])
         puts "Created person: #{ person.pretty_inspect }"
       else
         error = { resource_attrs: person.pretty_inspect,
@@ -98,10 +87,10 @@ module Utils
     end
 
     def inspect_person(person)
-      person.attributes.extract!("id", "name", "slug", "charge_translations").pretty_inspect
+      person.attributes.extract!("id", "name", "slug").pretty_inspect
     end
 
-    def find_or_initialize_person(name, position)
+    def find_or_initialize_person(name)
       proper_name = Utils::ProperName.new(name)
       matching_people = @site.people.where("slug ~* ? OR name = ?", proper_name.slug_regexp, proper_name.name)
 
@@ -115,10 +104,9 @@ module Utils
 
           puts "Updated name: #{ old_name } with #{ matching_person.name }"
         end
-        update_last_position(matching_person, position)
         matching_person
       else
-        @site.people.active.new(name: proper_name.name, slug: proper_name.slug, charge_translations: { ca: position })
+        @site.people.active.new(name: proper_name.name, slug: proper_name.slug)
       end
     end
 

@@ -8,8 +8,7 @@ module Utils
         puts "Processing Row... #{ row.pretty_inspect }\n\n"
         person = @people_importer.import!(
           attributes: {
-            name: row.cleaned_text("alt_c_rrec"),
-            position: row.cleaned_text("c_rrec")
+            name: row.cleaned_text("alt_c_rrec")
           }
         )
         department = @department_importer.import!(
