@@ -9,6 +9,7 @@ module Utils
                     gifts: "t4qw-gx3q",
                     invitations: "na9g-qaxb",
                     trips: "4ngp-d7x6" }
+    # charges dataset is pending to be added
     URL = "https://analisi.transparenciacatalunya.cat/resource"
 
     def self.valid_datasets

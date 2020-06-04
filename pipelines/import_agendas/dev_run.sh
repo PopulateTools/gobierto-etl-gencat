@@ -30,6 +30,8 @@ while read args; do
 done < $WORKING_DIR/datasets_for_extraction
 
 # Transform & Load > Process resources
+# For the moment charges dataset must be downloaded manually (https://github.com/PopulateTools/issues/issues/1028)
+cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-charges/run.rb downloads/datasets/charges.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv $GENCAT_SITE_DOMAIN
