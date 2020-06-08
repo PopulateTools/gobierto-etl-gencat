@@ -8,7 +8,11 @@ module Utils
     DATASET_IDS = { events: "4npk-u4e8",
                     gifts: "t4qw-gx3q",
                     invitations: "na9g-qaxb",
-                    trips: "4ngp-d7x6" }
+                    trips: "4ngp-d7x6",
+                    charges: "ebap-zcun" }
+    DATASET_ENDPOINTS = {
+      charges: "https://ctti.azure-westeurope-prod.socrata.com/api/views/ebap-zcun/rows.csv?accessType=DOWNLOAD&bom=true&format=true"
+    }
     # charges dataset is pending to be added
     URL = "https://analisi.transparenciacatalunya.cat/resource"
 
@@ -41,6 +45,8 @@ module Utils
         "$order=data_inici ASC"
       elsif @dataset == :trips
         "$order=Id ASC"
+      elsif @dataset == :charges
+        nil
       else
         raise StandardError, "Unknown sort condition for this dataset"
       end
@@ -55,10 +61,13 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
+      DATASET_ENDPOINTS[@dataset] ||
       URI.encode("#{ URL }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
+      return if DATASET_ENDPOINTS.has_key? @dataset
+
       @data_count ||= begin
                         resp = JSON.parse load_data(query_url([date_interval_condition, "$select=count(:id)"], "json"))
                         resp[0]["count_id"].to_i
