@@ -35,8 +35,9 @@ CSV.open(file.file_path, "wb") do |csv|
   csv << headers
   site.trips.all.select{ |t| t.destinations_meta["destinations"].length > 0 }.each do |trip|
     trip.destinations_meta["destinations"].each do |destination|
+      charge = trip.historical_charge
       csv << [
-        trip.id, trip.department.name, trip.department.id, trip.person.name, trip.person.charge, trip.person.slug, destination["lat"], destination["lon"],
+        trip.id, charge&.department&.name, charge&.department&.id, trip.person.name, charge&.name, trip.person.slug, destination["lat"], destination["lon"],
         destination["name"], trip.start_date.to_s, trip.end_date.to_s, trip.meta["purpose"], trip.description, trip.meta["food_expenses"],
         trip.meta["other_expenses"], trip.meta["total_expenses"], trip.meta["transport_expenses"], trip.meta["accomodation_expenses"],
         destination["country_code"], destination["country_name"], destination["city_name"]

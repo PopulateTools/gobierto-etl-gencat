@@ -8,13 +8,7 @@ module Utils
         puts "Processing Row... #{ row.pretty_inspect }\n\n"
         person = @people_importer.import!(
           attributes: {
-            name: row.cleaned_text("alt_c_rrec"),
-            position: row.cleaned_text("c_rrec")
-          }
-        )
-        department = @department_importer.import!(
-          attributes: {
-            name: row.cleaned_text("departament")
+            name: row.cleaned_text("alt_c_rrec")
           }
         )
         interest_group = @interest_group_importer.import!(
@@ -27,7 +21,7 @@ module Utils
                     "registry_id" => row.cleaned_text("n_mero_de_rgi") }
           }
         )
-        not_persisted_resources = [person, department, interest_group].select { |resource| resource.new_record? }
+        not_persisted_resources = [person, interest_group].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
           start_date = row.datetime("data") || row.datetime(":created_at") # If data (date) is nil, use the created_at attribute
           start_date = start_date.change(year: row.datetime(":created_at").year) if start_date.year < 2010
@@ -41,7 +35,6 @@ module Utils
                          slug: row[":id"],
                          meta: { "type" => row.cleaned_text("activitat") },
                          state: GobiertoCalendars::Event.states[:published],
-                         department_id: department.id,
                          interest_group_id: interest_group.id,
                          notify: false }
           event_form = GobiertoCalendars::EventForm.new(attributes)

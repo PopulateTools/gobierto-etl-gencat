@@ -14,11 +14,13 @@ require_relative "../../../utils/local_storage"
 #
 # Arguments:
 #  - 0: Rails env
-#  - 1: Dataset. Required. Options events, gifts, invitations or all
+#  - 1: Dataset. Required. Options events, gifts, invitations, charges or all
 #  - 2: Start Date. Optional. If value is "forever", data of any time
 #       is requested. If blank the start date will use the last
-#       execution date if existed
-#  - 3: End Date. Optional. Ignored if previous argument is "forever"
+#       execution date if existed. This option is ignored for charges dataset
+#       and all data will be downloaded for it for the moment.
+#  - 3: End Date. Optional. Ignored if previous argument is "forever". This
+#       option is ignored for charges dataset for the moment
 #
 # Samples:
 #
@@ -64,7 +66,7 @@ datasets.each do |dataset|
       puts "Dataset of #{ dataset } doesn't have data from #{ start_date }#{ end_date ? " to #{ end_date }" : "" }. Nothing to do."
     end
   else
-    puts "Dataset of #{ dataset } contains #{ count } records#{ start_date ? " from #{ start_date }" : " of any date" }#{ end_date ? " to #{ end_date }" : "" }."
+    puts "Dataset of #{ dataset } contains #{ count || "unknown number of" } records#{ start_date ? " from #{ start_date }" : " of any date" }#{ end_date ? " to #{ end_date }" : "" }."
     destination = Utils::LocalStorage.new(path: "downloads/datasets/#{ dataset }.csv")
     datasets_for_extraction << "#{ dataset_query.download_data_url } #{ destination.file_path }\n"
   end
