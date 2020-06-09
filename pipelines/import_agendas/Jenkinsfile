@@ -47,7 +47,7 @@ pipeline {
         }
         stage('Transform > Concert charges csv to UTF8') {
             steps {
-                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb /tmp/gencat/downloads/datasets/charges.csv /tmp/gencat/downloads/datasets/carges_utf8.csv ISO-8859-1"
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb /tmp/gencat/downloads/datasets/charges.csv /tmp/gencat/downloads/datasets/charges_utf8.csv ISO-8859-1"
             }
         }
         stage('Transform & Load > Process resources') {
