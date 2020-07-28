@@ -5,21 +5,42 @@ require "openssl"
 
 module Utils
   class OriginDataset
-    DATASET_IDS = { events: "4npk-u4e8",
-                    gifts: "t4qw-gx3q",
-                    invitations: "na9g-qaxb",
-                    trips: "4ngp-d7x6" }
+    DATASET_IDS = {
+      "development" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "ebap-zcun"
+      },
+      "staging" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "ebap-zcun"
+      },
+      "production" => {
+        events: "4npk-u4e8",
+        gifts: "t4qw-gx3q",
+        invitations: "na9g-qaxb",
+        trips: "4ngp-d7x6"
+      }
+    }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
+    TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
 
-    def self.valid_datasets
-      DATASET_IDS.keys
+    def self.valid_datasets(environment)
+      DATASET_IDS[environment].keys
     end
 
     def initialize(opts={})
       @start_date = opts[:start_date]
       @end_date = opts[:end_date]
       @dataset = opts[:dataset]
-      @dataset_id = DATASET_IDS[opts[:dataset]]
+      @environment = opts[:environment].to_s
+      @dataset_id = DATASET_IDS[@environment][opts[:dataset]]
+      @url = @environment == "production" ? URL : TEST_URL
     end
 
     def date_interval_condition
@@ -40,6 +61,8 @@ module Utils
         "$order=data_inici ASC"
       elsif @dataset == :trips
         "$order=Id ASC"
+      elsif @dataset == :charges
+        nil
       else
         raise StandardError, "Unknown sort condition for this dataset"
       end
@@ -54,7 +77,7 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
-      URI.encode("#{ URL }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
+      URI.encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
