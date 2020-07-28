@@ -5,29 +5,45 @@ require "openssl"
 
 module Utils
   class OriginDataset
-    DATASET_IDS = { events: "4npk-u4e8",
-                    gifts: "t4qw-gx3q",
-                    invitations: "na9g-qaxb",
-                    trips: "dze7-9jyh",
-                    charges: "ebap-zcun" }
-                    # trips: "4ngp-d7x6" }
+    DATASET_IDS = {
+      "development" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "ebap-zcun"
+      },
+      "staging" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "ebap-zcun"
+      },
+      "production" => {
+        events: "4npk-u4e8",
+        gifts: "t4qw-gx3q",
+        invitations: "na9g-qaxb",
+        trips: "4ngp-d7x6"
+      }
+    }
     DATASET_ENDPOINTS = {
       charges: "https://ctti.azure-westeurope-prod.socrata.com/api/views/ebap-zcun/rows.csv?accessType=DOWNLOAD&bom=true&format=true"
-    }
     # charges dataset is pending to be added
     URL = "https://analisi.transparenciacatalunya.cat/resource"
     TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
 
-    def self.valid_datasets
-      DATASET_IDS.keys
+    def self.valid_datasets(environment)
+      DATASET_IDS[environment].keys
     end
 
     def initialize(opts={})
       @start_date = opts[:start_date]
       @end_date = opts[:end_date]
       @dataset = opts[:dataset]
-      @dataset_id = DATASET_IDS[opts[:dataset]]
-      @url = @dataset == :trips ? TEST_URL : URL
+      @environment = opts[:environment].to_s
+      @dataset_id = DATASET_IDS[@environment][opts[:dataset]]
+      @url = @environment == "production" ? URL : TEST_URL
     end
 
     def date_interval_condition
