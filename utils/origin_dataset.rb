@@ -29,6 +29,7 @@ module Utils
     }
     DATASET_ENDPOINTS = {
       charges: "https://ctti.azure-westeurope-prod.socrata.com/api/views/ebap-zcun/rows.csv?accessType=DOWNLOAD&bom=true&format=true"
+    }
     # charges dataset is pending to be added
     URL = "https://analisi.transparenciacatalunya.cat/resource"
     TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
