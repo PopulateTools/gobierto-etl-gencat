@@ -25,18 +25,19 @@ require_relative "../../../utils/local_storage"
 #   /path/to/project/operations/gobierto_people/check-data-presence/run.rb staging gifts 2018-06-01 2018-07-01
 #
 
-valid_datasets = Utils::OriginDataset.valid_datasets
-dataset_opts = valid_datasets + [:all]
 
 if ARGV.length < 2
   raise "Rails env and dataset argument are required. Options: #{ dataset_opts.join("|") }"
 end
 
+rails_env = ARGV[0]
+valid_datasets = Utils::OriginDataset.valid_datasets(rails_env)
+dataset_opts = valid_datasets + [:all]
+
 if !dataset_opts.include? ARGV[1].to_sym
   raise "Invalid dataset argument. Options: #{ dataset_opts.join("|") }"
 end
 
-rails_env = ARGV[0]
 datasets = ARGV[1] == "all" ? valid_datasets : [ARGV[1].to_sym]
 
 start_date = end_date = nil
@@ -55,7 +56,7 @@ puts "[START] check-data-presence/run.rb with datasets=#{ datasets.join(", ") },
 datasets_for_extraction = []
 datasets.each do |dataset|
   puts "Checking #{ dataset } records presence..."
-  dataset_query = Utils::OriginDataset.new(start_date: start_date, end_date: end_date, dataset: dataset)
+  dataset_query = Utils::OriginDataset.new(start_date: start_date, end_date: end_date, dataset: dataset, environment: rails_env)
   if (count = dataset_query.data_count) == 0
     if start_date.blank?
       puts "The dataset of #{ dataset } doesn't have any data"
