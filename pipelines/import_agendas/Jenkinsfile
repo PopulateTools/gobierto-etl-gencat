@@ -67,7 +67,7 @@ pipeline {
                   --name "$DATASET_NAME" \
                   --slug $DATASET_SLUG \
                   --table-name $DATASET_TABLE_NAME \
-                  --gobierto-url $GENCAT_SITE_DOMAIN \
+                  --gobierto-url https://${GENCAT_SITE_DOMAIN} \
                   --schema-path ${GENCAT_ETL}/pipelines/import_agendas/schema.json \
                   --file-path /tmp/gencat/gencat_trips_${RAILS_ENV}.csv
               '''
