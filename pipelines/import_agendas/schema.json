@@ -1,0 +1,24 @@
+{
+  "gobierto_id": {"type": "integer"},
+  "department_name": {"type": "text"},
+  "department_id": {"type": "integer"},
+  "person_name": {"type": "text"},
+  "person_charge": {"type": "text"},
+  "person_slug": {"type": "text"},
+  "lat": {"type": "numeric"},
+  "lon": {"type": "numeric"},
+  "destination_name": {"type": "text"},
+  "start_date": {"type": "date", "optional_params": { "date_format": "YYYY-MM-DD" }},
+  "end_date": {"type": "date", "optional_params": { "date_format": "YYYY-MM-DD" }},
+  "purpose": {"type": "text"},
+  "agenda": {"type": "text"},
+  "food_expenses": {"type": "numeric"},
+  "other_expenses": {"type": "numeric"},
+  "total_expenses": {"type": "numeric"},
+  "transport_expenses": {"type": "numeric"},
+  "accomodation_expenses": {"type": "numeric"},
+  "country": {"type": "text"},
+  "country_name": {"type": "text"},
+  "city_name": {"type": "text"}
+}
+
