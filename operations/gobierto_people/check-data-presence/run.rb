@@ -14,20 +14,21 @@ require_relative "../../../utils/local_storage"
 #
 # Arguments:
 #  - 0: Rails env
-#  - 1: Dataset. Required. Options events, gifts, invitations or all
-#  - 2: Start Date. Optional. If value is "forever", data of any time
+#  - 1: Dataset. Required. Options events, gifts, invitations, charges or all
+#  - 2: Basic auth credentials. Required. Some datasets may require requests
+#       with basic auth. The option must have the form "username:password"
+#  - 3: Start Date. Optional. If value is "forever", data of any time
 #       is requested. If blank the start date will use the last
-#       execution date if existed
-#  - 3: End Date. Optional. Ignored if previous argument is "forever"
+#       execution date if existed.
+#  - 4: End Date. Optional. Ignored if previous argument is "forever".
 #
 # Samples:
 #
-#   /path/to/project/operations/gobierto_people/check-data-presence/run.rb staging gifts 2018-06-01 2018-07-01
+#   /path/to/project/operations/gobierto_people/check-data-presence/run.rb staging gifts username:password 2018-06-01 2018-07-01
 #
 
-
-if ARGV.length < 2
-  raise "Rails env and dataset argument are required. Options: #{ dataset_opts.join("|") }"
+if ARGV.length < 3
+  raise "Rails env, dataset and basic auth credentials arguments are required. Options for dataset: #{ dataset_opts.join("|") }"
 end
 
 rails_env = ARGV[0]
@@ -39,11 +40,12 @@ if !dataset_opts.include? ARGV[1].to_sym
 end
 
 datasets = ARGV[1] == "all" ? valid_datasets : [ARGV[1].to_sym]
+basic_auth_credentials = ARGV[2]
 
 start_date = end_date = nil
-unless ARGV[2] == "forever"
-  start_date = DateTime.parse(ARGV[2]) if ARGV[2]
-  end_date = DateTime.parse(ARGV[3]) if ARGV[3]
+unless ARGV[3] == "forever"
+  start_date = DateTime.parse(ARGV[3]) if ARGV[3]
+  end_date = DateTime.parse(ARGV[4]) if ARGV[4]
 
   last_execution = Utils::LocalStorage.new(path: "downloads/last_start_query_date-#{rails_env}.txt")
   if start_date.blank? && last_execution.exist?
