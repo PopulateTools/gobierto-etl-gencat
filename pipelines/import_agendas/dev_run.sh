@@ -27,7 +27,7 @@ cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/clear-path/run
 
 # Extract > Download data
 while read args; do
-  cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download/run.rb $args
+  cd $DEV_DIR/gobierto-etl-utils/; ruby operations/api-download/run.rb $args
 done < $WORKING_DIR/datasets_for_extraction
 
 # Transform & Load > Process resources

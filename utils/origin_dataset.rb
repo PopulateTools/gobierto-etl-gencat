@@ -29,6 +29,9 @@ module Utils
     }
     URL = "https://analisi.transparenciacatalunya.cat/resource"
     TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
+    DATASET_BASIC_AUTH = {
+      charges: true
+    }
 
     def self.valid_datasets(environment)
       DATASET_IDS[environment].keys
@@ -38,6 +41,7 @@ module Utils
       @start_date = opts[:start_date]
       @end_date = opts[:end_date]
       @dataset = opts[:dataset]
+      @basic_auth_credentials = opts[:basic_auth_credentials]
       @environment = opts[:environment].to_s
       @dataset_id = DATASET_IDS[@environment][opts[:dataset]]
       @url = @environment == "production" ? URL : TEST_URL
@@ -104,8 +108,15 @@ module Utils
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request = Net::HTTP::Get.new(uri.request_uri)
+      request.basic_auth(*@basic_auth_credentials.split(":")) if DATASET_BASIC_AUTH[@dataset]
       response = http.request(request)
       response.body
+    end
+
+    def auth_params
+      return unless DATASET_BASIC_AUTH[@dataset]
+
+      "--basic_auth #{@basic_auth_credentials}"
     end
   end
 end

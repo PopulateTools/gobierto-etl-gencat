@@ -58,19 +58,18 @@ puts "[START] check-data-presence/run.rb with datasets=#{ datasets.join(", ") },
 datasets_for_extraction = []
 datasets.each do |dataset|
   puts "Checking #{ dataset } records presence..."
-  dataset_query = Utils::OriginDataset.new(start_date: start_date, end_date: end_date, dataset: dataset, environment: rails_env)
+  dataset_query = Utils::OriginDataset.new(start_date: start_date, end_date: end_date, dataset: dataset, environment: rails_env, basic_auth_credentials: basic_auth_credentials)
   if (count = dataset_query.data_count) == 0
     if start_date.blank?
       puts "The dataset of #{ dataset } doesn't have any data"
-      exit(-1)
     else
       puts "Dataset of #{ dataset } doesn't have data from #{ start_date }#{ end_date ? " to #{ end_date }" : "" }. Nothing to do."
     end
   else
-    puts "Dataset of #{ dataset } contains #{ count } records#{ start_date ? " from #{ start_date }" : " of any date" }#{ end_date ? " to #{ end_date }" : "" }."
-    destination = Utils::LocalStorage.new(path: "downloads/datasets/#{ dataset }.csv")
-    datasets_for_extraction << "#{ dataset_query.download_data_url } #{ destination.file_path }\n"
+    puts "Dataset of #{ dataset } contains #{ count || "unknown number of" } records#{ start_date ? " from #{ start_date }" : " of any date" }#{ end_date ? " to #{ end_date }" : "" }."
   end
+  destination = Utils::LocalStorage.new(path: "downloads/datasets/#{ dataset }.csv")
+  datasets_for_extraction << "--source-url #{ dataset_query.download_data_url } --output-file #{ destination.file_path } #{ dataset_query.auth_params }\n"
 end
 
 output = Utils::LocalStorage.new(content: datasets_for_extraction.join, path: "datasets_for_extraction")

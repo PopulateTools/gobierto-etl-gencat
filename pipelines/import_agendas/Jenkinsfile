@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Extract > Download data') {
             steps {
-                sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
+                sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/api-download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
             }
         }
         stage('Transform & Load > Process resources') {
