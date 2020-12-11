@@ -90,13 +90,10 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
-      DATASET_ENDPOINTS[@dataset] ||
       URI.encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
-      return if DATASET_ENDPOINTS.has_key? @dataset
-
       @data_count ||= begin
                         resp = JSON.parse load_data(query_url([date_interval_condition, "$select=count(:id)"], "json"))
                         resp[0]["count_id"].to_i
