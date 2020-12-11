@@ -11,14 +11,14 @@ module Utils
         gifts: "amh6-6pgd",
         invitations: "pxgs-vhxp",
         trips: "dze7-9jyh",
-        charges: "ebap-zcun"
+        charges: "t93n-tvdf"
       },
       "staging" => {
         events: "pada-92wh",
         gifts: "amh6-6pgd",
         invitations: "pxgs-vhxp",
         trips: "dze7-9jyh",
-        charges: "ebap-zcun"
+        charges: "t93n-tvdf"
       },
       "production" => {
         events: "4npk-u4e8",
@@ -27,8 +27,17 @@ module Utils
         trips: "4ngp-d7x6"
       }
     }
-    URL = "https://analisi.transparenciacatalunya.cat/resource"
-    TEST_URL = "https://ctti.azure-westeurope-prod.socrata.com/resource"
+    DATASET_URLS = {
+      default: {
+        "development" => "https://ctti.azure-westeurope-prod.socrata.com/resource",
+        "staging" => "https://ctti.azure-westeurope-prod.socrata.com/resource",
+        "production" => "https://analisi.transparenciacatalunya.cat/resource"
+      },
+      charges: {
+        "development" => "https://analisi.transparenciacatalunya.cat/resource",
+        "staging" => "https://analisi.transparenciacatalunya.cat/resource"
+      }
+    }
     DATASET_BASIC_AUTH = {
       charges: true
     }
@@ -44,7 +53,7 @@ module Utils
       @basic_auth_credentials = opts[:basic_auth_credentials]
       @environment = opts[:environment].to_s
       @dataset_id = DATASET_IDS[@environment][opts[:dataset]]
-      @url = @environment == "production" ? URL : TEST_URL
+      @url = DATASET_URLS.dig(@dataset, @environment) || DATASET_URLS.dig(:default, @environment)
     end
 
     def date_interval_condition
