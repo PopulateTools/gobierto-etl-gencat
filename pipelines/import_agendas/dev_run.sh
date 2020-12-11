@@ -4,6 +4,7 @@ GENCAT_SITE_DOMAIN="gencat.gobierto.test"
 CLEAR_PREVIOUS_DATA="True"
 RAILS_ENV="development"
 WORKING_DIR=/tmp/gencat
+BASIC_AUTH_CREDENTIALS="username:password"
 
 # Extract > Download last start query date
 cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download-s3/run.rb "gencat/gobierto_people/last_execution/last_start_query_date-$RAILS_ENV.txt" $WORKING_DIR/downloads/
@@ -16,9 +17,9 @@ fi
 
 # # Extract > Check data presence
 if $CLEAR_PREVIOUS_DATA; then
-  cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/check-data-presence/run.rb $RAILS_ENV all forever
+  cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/check-data-presence/run.rb $RAILS_ENV all $BASIC_AUTH_CREDENTIALS forever
 else
-  cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/check-data-presence/run.rb $RAILS_ENV all
+  cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/check-data-presence/run.rb $RAILS_ENV all $BASIC_AUTH_CREDENTIALS
 fi
 
 # Extract > Clean previous downloads
@@ -26,7 +27,7 @@ cd $DEV_DIR/gobierto-etl-gencat/; ruby operations/gobierto_people/clear-path/run
 
 # Extract > Download data
 while read args; do
-  cd $DEV_DIR/gobierto-etl-utils/; ruby operations/download/run.rb $args
+  cd $DEV_DIR/gobierto-etl-utils/; ruby operations/api-download/run.rb $args
 done < $WORKING_DIR/datasets_for_extraction
 
 # Transform > Convert charges csv to UTF8
