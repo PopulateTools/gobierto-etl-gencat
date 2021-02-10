@@ -30,13 +30,13 @@ pipeline {
         stage('Extract > Check data presence of any time') {
             when { expression { env.CLEAR_PREVIOUS_DATA == 'True' } }
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all ${BASIC_AUTH_CREDENTIALS} forever"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all $BASIC_AUTH_CREDENTIALS forever"
             }
         }
         stage('Extract > Check data presence since last build') {
             when { expression { env.CLEAR_PREVIOUS_DATA != 'True' } }
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all ${BASIC_AUTH_CREDENTIALS}"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all $BASIC_AUTH_CREDENTIALS"
             }
         }
         stage('Extract > Clean previous downloads') {
