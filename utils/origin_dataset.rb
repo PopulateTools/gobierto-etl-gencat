@@ -24,7 +24,8 @@ module Utils
         events: "4npk-u4e8",
         gifts: "t4qw-gx3q",
         invitations: "na9g-qaxb",
-        trips: "4ngp-d7x6"
+        trips: "4ngp-d7x6",
+        charges: "t93n-tvdf"
       }
     }
     DATASET_URLS = {
@@ -35,7 +36,8 @@ module Utils
       },
       charges: {
         "development" => "https://analisi.transparenciacatalunya.cat/resource",
-        "staging" => "https://analisi.transparenciacatalunya.cat/resource"
+        "staging" => "https://analisi.transparenciacatalunya.cat/resource",
+        "production" => "https://analisi.transparenciacatalunya.cat/resource"
       }
     }
     DATASET_BASIC_AUTH = {
