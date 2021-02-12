@@ -30,7 +30,12 @@ while read args; do
   cd $DEV_DIR/gobierto-etl-utils/; ruby operations/api-download/run.rb $args
 done < $WORKING_DIR/datasets_for_extraction
 
+# Transform > Convert charges csv to UTF8
+cd $DEV_DIR/gobierto-etl-utils/; ruby operations/convert-to-utf8/run.rb ${WORKING_DIR}/downloads/datasets/charges.csv ${WORKING_DIR}/downloads/datasets/charges_utf8.csv ISO-8859-1
+
 # Transform & Load > Process resources
+# For the moment charges dataset must be downloaded manually (https://github.com/PopulateTools/issues/issues/1028)
+cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-charges/run.rb downloads/datasets/charges_utf8.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv $GENCAT_SITE_DOMAIN
 cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-gencat/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv $GENCAT_SITE_DOMAIN

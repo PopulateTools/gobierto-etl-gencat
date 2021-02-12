@@ -17,16 +17,10 @@ module Utils
         puts "Processing Row... #{ row.pretty_inspect }\n\n"
         person = @people_importer.import!(
           attributes: {
-            name: row.cleaned_text("rebut_per"),
-            position: row.cleaned_text("c_rrec")
+            name: row.cleaned_text("rebut_per")
           }
         )
-        department = @department_importer.import!(
-          attributes: {
-            name: row.cleaned_text("departament")
-          }
-        )
-        not_persisted_resources = [person, department].select { |resource| resource.new_record? }
+        not_persisted_resources = [person].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
           @gift_importer.import!(
             attributes: { external_id: row[":id"] },
@@ -34,7 +28,6 @@ module Utils
                      name: row.cleaned_text("obsequi"),
                      reason: row.cleaned_text("destinat_a"),
                      date: row.datetime("data"),
-                     department_id: department.id,
                      meta: { "category_name" => row.cleaned_text("categor_a_obsequi"),
                              "event_name" => row.cleaned_text("en_ocasi_de"),
                              "delivered_by" => row.cleaned_text("lliurat_per") } }

@@ -49,8 +49,14 @@ pipeline {
                 sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/api-download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
             }
         }
+        stage('Transform > Concert charges csv to UTF8') {
+            steps {
+                sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/convert-to-utf8/run.rb /tmp/gencat/downloads/datasets/charges.csv /tmp/gencat/downloads/datasets/charges_utf8.csv ISO-8859-1"
+            }
+        }
         stage('Transform & Load > Process resources') {
             steps {
+                sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-charges/run.rb downloads/datasets/charges_utf8.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-gifts/run.rb downloads/datasets/gifts.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-invitations/run.rb downloads/datasets/invitations.csv ${GENCAT_SITE_DOMAIN}"
                 sh "cd ${GOBIERTO}; bin/rails runner ${GENCAT_ETL}/operations/gobierto_people/import-trips/run.rb downloads/datasets/trips.csv ${GENCAT_SITE_DOMAIN}"
