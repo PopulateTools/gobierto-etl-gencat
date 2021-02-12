@@ -13,6 +13,7 @@ pipeline {
         // GENCAT_SITE_DOMAIN = "gencat.gobierto.es"
         // RAILS_ENV = "production"
         // CLEAR_PREVIOUS_DATA = "True" or "False" (it must be a string with the boolean values from Python)
+        // BASIC_AUTH_CREDENTIALS = username:password
     }
     stages {
         stage('Extract > Download last start query date') {
@@ -29,13 +30,13 @@ pipeline {
         stage('Extract > Check data presence of any time') {
             when { expression { env.CLEAR_PREVIOUS_DATA == 'True' } }
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all forever"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all $BASIC_AUTH_CREDENTIALS forever"
             }
         }
         stage('Extract > Check data presence since last build') {
             when { expression { env.CLEAR_PREVIOUS_DATA != 'True' } }
             steps {
-                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all"
+                sh "cd ${GENCAT_ETL}; ruby operations/gobierto_people/check-data-presence/run.rb ${RAILS_ENV} all $BASIC_AUTH_CREDENTIALS"
             }
         }
         stage('Extract > Clean previous downloads') {
@@ -45,7 +46,7 @@ pipeline {
         }
         stage('Extract > Download data') {
             steps {
-                sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
+                sh "while read args; do cd ${GOBIERTO_ETL_UTILS}; ruby operations/api-download/run.rb \$args; done < /tmp/gencat/datasets_for_extraction"
             }
         }
         stage('Transform & Load > Process resources') {
