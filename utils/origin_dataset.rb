@@ -5,26 +5,57 @@ require "openssl"
 
 module Utils
   class OriginDataset
-    DATASET_IDS = { events: "4npk-u4e8",
-                    gifts: "t4qw-gx3q",
-                    invitations: "na9g-qaxb",
-                    trips: "4ngp-d7x6",
-                    charges: "ebap-zcun" }
-    DATASET_ENDPOINTS = {
-      charges: "https://ctti.azure-westeurope-prod.socrata.com/api/views/ebap-zcun/rows.csv?accessType=DOWNLOAD&bom=true&format=true"
+    DATASET_IDS = {
+      "development" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "t93n-tvdf"
+      },
+      "staging" => {
+        events: "pada-92wh",
+        gifts: "amh6-6pgd",
+        invitations: "pxgs-vhxp",
+        trips: "dze7-9jyh",
+        charges: "t93n-tvdf"
+      },
+      "production" => {
+        events: "4npk-u4e8",
+        gifts: "t4qw-gx3q",
+        invitations: "na9g-qaxb",
+        trips: "4ngp-d7x6",
+        charges: "t93n-tvdf"
+      }
     }
-    # charges dataset is pending to be added
-    URL = "https://analisi.transparenciacatalunya.cat/resource"
+    DATASET_URLS = {
+      default: {
+        "development" => "https://ctti.azure-westeurope-prod.socrata.com/resource",
+        "staging" => "https://ctti.azure-westeurope-prod.socrata.com/resource",
+        "production" => "https://analisi.transparenciacatalunya.cat/resource"
+      },
+      charges: {
+        "development" => "https://analisi.transparenciacatalunya.cat/resource",
+        "staging" => "https://analisi.transparenciacatalunya.cat/resource",
+        "production" => "https://analisi.transparenciacatalunya.cat/resource"
+      }
+    }
+    DATASET_BASIC_AUTH = {
+      charges: true
+    }
 
-    def self.valid_datasets
-      DATASET_IDS.keys
+    def self.valid_datasets(environment)
+      DATASET_IDS[environment].keys
     end
 
     def initialize(opts={})
       @start_date = opts[:start_date]
       @end_date = opts[:end_date]
       @dataset = opts[:dataset]
-      @dataset_id = DATASET_IDS[opts[:dataset]]
+      @basic_auth_credentials = opts[:basic_auth_credentials]
+      @environment = opts[:environment].to_s
+      @dataset_id = DATASET_IDS[@environment][opts[:dataset]]
+      @url = DATASET_URLS.dig(@dataset, @environment) || DATASET_URLS.dig(:default, @environment)
     end
 
     def date_interval_condition
@@ -61,13 +92,10 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
-      DATASET_ENDPOINTS[@dataset] ||
-      URI.encode("#{ URL }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
+      URI.encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
-      return if DATASET_ENDPOINTS.has_key? @dataset
-
       @data_count ||= begin
                         resp = JSON.parse load_data(query_url([date_interval_condition, "$select=count(:id)"], "json"))
                         resp[0]["count_id"].to_i
@@ -91,8 +119,15 @@ module Utils
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       request = Net::HTTP::Get.new(uri.request_uri)
+      request.basic_auth(*@basic_auth_credentials.split(":")) if DATASET_BASIC_AUTH[@dataset]
       response = http.request(request)
       response.body
+    end
+
+    def auth_params
+      return unless DATASET_BASIC_AUTH[@dataset]
+
+      "--basic_auth #{@basic_auth_credentials}"
     end
   end
 end

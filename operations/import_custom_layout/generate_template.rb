@@ -22,7 +22,7 @@ INSECURE_ASSETS = [
 ]
 
 def remove_default_page_header!(layout_page)
-  header_tag = layout_page.xpath("//h1[@class='titulo-capcalera']").first
+  header_tag = layout_page.xpath("//h1[@class='NG-menu__title']").first
   header_tag.children.remove
   fixed_node = Nokogiri::XML::Node.new("span", layout_page)
   header_tag.add_child(fixed_node)
@@ -140,11 +140,8 @@ layout_page.xpath("//link[contains(@href, '#{ASSETS_HTTP_LOCATION}')]").each do 
   node['href'] = node['href'].gsub(ASSETS_HTTP_LOCATION, ASSETS_HTTPS_LOCATION)
 end
 
-# Remove navigation button
-layout_page.at("//button[@data-target='#menu_flotant_cont']").remove
-
 # Remove breadcrumb app root (this is delgated to Rails)
-layout_page.at("//ol[contains(@class, 'breadcrumb')]").xpath("li").last.remove
+layout_page.at("//ul[contains(@class, 'NG__breadcrumb')]").xpath("li").last.remove
 
 # Remove default page header
 remove_default_page_header!(layout_page)
