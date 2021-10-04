@@ -7,6 +7,7 @@ module Utils
       @class_name = opts[:class_name]
       @relation = opts[:relation] || @class_name.constantize
       @errors = []
+      @cached_resources = {}
     end
 
     def title_msg
@@ -53,7 +54,8 @@ module Utils
 
     def find_or_create_resource(attributes, extra)
       attributes.merge!(site: @site) if @relation.reflect_on_association(:site).present?
-      resource = @relation.find_or_initialize_by(attributes)
+      cached_resource = find_cached_resource(attributes)
+      resource = cached_resource.presence || @relation.find_or_initialize_by(attributes)
 
       if resource.persisted?
         puts "Found existing resource:"
@@ -70,8 +72,17 @@ module Utils
       else
         resource.assign_attributes(extra)
         save_new resource
+        add_to_cached_resources(resource, attributes)
       end
       resource
+    end
+
+    def add_to_cached_resources(resource, attributes)
+      @cached_resources[attributes] = resource
+    end
+
+    def find_cached_resource(attributes)
+      @cached_resources[attributes]
     end
   end
 end
