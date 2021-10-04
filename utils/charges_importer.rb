@@ -34,7 +34,7 @@ module Utils
         not_persisted_resources = [person, department].select { |resource| resource.new_record? }
         if not_persisted_resources.blank?
           @charge_importer.import!(
-            attributes: { external_id: row[id_key] },
+            attributes: { external_id: row[id_key].presence || row["id"] },
             extra: { person_id: person.id,
                      department_id: department.id,
                      name: row.cleaned_text("desc_carrec"),

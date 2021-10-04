@@ -12,7 +12,7 @@ module Utils
     end
 
     def extends?(other_name)
-      /#{ other_name.slug_regexp }/.match(slug) &&
+      other_name.slug_regexp.match?(slug) &&
         (components_without_conjunctions - other_name.components_without_conjunctions).join.length > (other_name.components_without_conjunctions - components_without_conjunctions).join.length
     end
 
@@ -20,7 +20,7 @@ module Utils
       @components - CONJUNCTIONS
     end
 
-    def slug_regexp
+    def slug_regexp_string
       parameterized_components = components.dup
       parameterized_components.map! do |component|
         if CONJUNCTIONS.include?(component)
@@ -38,6 +38,10 @@ module Utils
       end
 
       "^#{ parameterized_components.join("-").gsub(/-\(-/, "(-") }$"
+    end
+
+    def slug_regexp
+      Regexp.new(slug_regexp_string, true)
     end
 
     def abbrev_expr(string)

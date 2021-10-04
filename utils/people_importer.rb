@@ -12,6 +12,7 @@ module Utils
     def initialize(opts = {})
       @similarities_with_existing_people = {}
       @site = opts[:site]
+      @existing_people = {}
       @errors = []
     end
 
@@ -29,9 +30,11 @@ module Utils
 
     def resolve_name_similarities(name)
       proper_name = Utils::ProperName.new(name)
-      automatic_matches = @site.people.where("slug ~* ? OR name = ?", proper_name.slug_regexp, proper_name.name)
+      automatic_matches = find_existing_person(proper_name)
+      return proper_name.name if automatic_matches.exists? || dictionary.has_key?(proper_name.name)
+
       matches = find_similarities(proper_name)
-      return proper_name.name if automatic_matches.exists? || matches.blank? || dictionary.has_key?(proper_name.name)
+      return proper_name.name if matches.blank?
 
       if (name_solution = matches.find { |match| dictionary.has_key?(match.name) })
         puts "Name #{ proper_name.name } resolved as #{ name_solution.name }"
@@ -76,6 +79,7 @@ module Utils
     def save_new(person)
       if (result = person.save)
         puts "Created person: #{ person.pretty_inspect }"
+        add_to_existing_people(person)
       else
         error = { resource_attrs: person.pretty_inspect,
                   errors_msg: person.errors.full_messages.pretty_inspect }
@@ -86,17 +90,31 @@ module Utils
       result
     end
 
+    def add_to_existing_people(person)
+      (@existing_people[{ name: person.name, slug: person.slug }] ||= []).append(person)
+    end
+
+    def find_existing_person(proper_name)
+      cached_result = @existing_people.find do |key, _|
+        proper_name.slug_regexp.match?(key[:slug]) || proper_name == key[:name]
+      end&.last
+
+      return cached_result if cached_result.present?
+
+      @existing_people[{ name: proper_name.name, slug: proper_name.slug }] = @site.people.where("slug ~* ? OR name = ?", proper_name.slug_regexp_string, proper_name.name).to_a
+    end
+
     def inspect_person(person)
       person.attributes.extract!("id", "name", "slug").pretty_inspect
     end
 
     def find_or_initialize_person(name)
       proper_name = Utils::ProperName.new(name)
-      matching_people = @site.people.where("slug ~* ? OR name = ?", proper_name.slug_regexp, proper_name.name)
+      matching_people = find_existing_person(proper_name)
 
-      if matching_people.exists?
+      if matching_people.present?
         matching_person = matching_people.first
-        puts "Found existing person #{ matching_person.name }"
+        puts "Found existing person with name #{ matching_person.name } and slug #{ matching_person.slug }"
 
         if proper_name.extends? Utils::ProperName.new(matching_person.name)
           old_name = matching_person.name
@@ -106,6 +124,7 @@ module Utils
         end
         matching_person
       else
+        puts "Initialized new person with name #{proper_name.name} and slug #{proper_name.slug}"
         @site.people.active.new(name: proper_name.name, slug: proper_name.slug)
       end
     end
