@@ -8,7 +8,6 @@ Edit `.env.example` and copy it to `.env` or `.rbenv-vars` with the expected val
 
 This repository relies heavily in [gobierto_budgets_data](https://github.com/PopulateTools/gobierto_budgets_data)
 
-
 ## Available operations
 
 - check-data-presence
