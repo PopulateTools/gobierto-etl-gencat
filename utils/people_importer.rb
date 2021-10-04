@@ -96,7 +96,7 @@ module Utils
 
       if matching_people.exists?
         matching_person = matching_people.first
-        puts "Found existing person #{ matching_person.name }"
+        puts "Found existing person with name #{ matching_person.name } and slug #{ matching_person.slug }"
 
         if proper_name.extends? Utils::ProperName.new(matching_person.name)
           old_name = matching_person.name
@@ -106,6 +106,7 @@ module Utils
         end
         matching_person
       else
+        puts "Initialized new person with name #{proper_name.name} and slug #{proper_name.slug}"
         @site.people.active.new(name: proper_name.name, slug: proper_name.slug)
       end
     end
