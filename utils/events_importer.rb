@@ -3,6 +3,7 @@ require_relative "./base_importer"
 module Utils
   class EventsImporter < BaseImporter
     def import!
+      events_count = @data.count
       @data.each do |row|
         puts "\n\n===================================="
         puts "Processing Row... #{ row.pretty_inspect }\n\n"
@@ -65,6 +66,8 @@ module Utils
       rescue StandardError => e
         Rollbar.error(e, "Error processing row with external_id: #{ row[":id"] }")
       end
+
+        @extra_info = "There was #{data_count} events to import and currently there are #{@site.events.count}. #{data_count > @site.events.count ? "Something is wrong, there are more events to import than existing ones" : "Counts are OK"}"
 
       super
     end
