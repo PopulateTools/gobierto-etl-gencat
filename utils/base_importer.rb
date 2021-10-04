@@ -36,7 +36,12 @@ module Utils
         end
       else
         puts "The importer has loaded data with no errors"
+        puts @extra_info
       end
+    end
+
+    def data_count
+      @data.count
     end
 
     def errors?
