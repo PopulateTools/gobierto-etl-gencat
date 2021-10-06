@@ -5,7 +5,7 @@ pipeline {
         PATH = "$HOME/.rbenv/shims:$PATH"
         GENCAT_ETL = "/var/www/gobierto-etl-gencat/current"
         STORAGE_DIR = "/var/lib/jenkins/jobs/gobierto-etl-gencat\\ layout/builds/${env.BUILD_NUMBER}"
-        LAYOUT_LOCATION = "http://governobert.gencat.cat/templates?mode=html&code=GOOB0001"
+        LAYOUT_LOCATION = "https://governobert.gencat.cat/templates?mode=html&code=GOOB0001"
         LOCALES = "ca es"
         // Variables that must be defined via Jenkins UI:
         // GOBIERTO = "/var/www/gobierto/current"
