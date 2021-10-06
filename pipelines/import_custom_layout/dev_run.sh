@@ -3,7 +3,7 @@
 set -e
 
 GENCAT_SITE_DOMAIN="madrid.gobierto.test"
-LAYOUT_LOCATION="http://governobert.gencat.cat/templates?mode=html&code=GOOB0001"
+LAYOUT_LOCATION="https://governobert.gencat.cat/templates?mode=html&code=GOOB0001"
 GENCAT_ETL=$DEV_DIR/gobierto-etl-gencat
 STORAGE_DIR=$DEV_DIR/gobierto-etl-gencat/tmp
 LOCALES="ca es"
