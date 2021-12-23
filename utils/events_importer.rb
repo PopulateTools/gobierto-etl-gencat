@@ -15,7 +15,7 @@ module Utils
         end
         person = @people_importer.import!(
           attributes: {
-            name: row.cleaned_text("alt_c_rrec")
+            name: row.cleaned_text("nom_i_cognoms")
           }
         )
         interest_group = @interest_group_importer.import!(
