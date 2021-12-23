@@ -7,6 +7,12 @@ module Utils
       @data.each do |row|
         puts "\n\n===================================="
         puts "Processing Row... #{ row.pretty_inspect }\n\n"
+
+        unless row.cleaned_text("tipologia") == "ALT CARREC"
+          puts "Skipping not \"ALT CARREC\" person..."
+
+          next
+        end
         person = @people_importer.import!(
           attributes: {
             name: row.cleaned_text("alt_c_rrec")
