@@ -16,7 +16,7 @@ module Utils
       "staging" => {
         events: "pada-92wh",
         gifts: "amh6-6pgd",
-        invitations: "pxgs-vhxp",
+        invitations: "2u63-j8pw",
         trips: "dze7-9jyh",
         charges: "t93n-tvdf"
       },
