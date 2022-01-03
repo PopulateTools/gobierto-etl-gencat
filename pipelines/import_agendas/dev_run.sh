@@ -47,6 +47,3 @@ cd $DEV_DIR/gobierto-etl-utils/; ruby operations/upload-s3/run.rb $WORKING_DIR/g
 
 # Documentation > Upload last execution date
 cd $DEV_DIR/gobierto-etl-utils/; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt "gencat/gobierto_people/last_execution/last_start_query_date-$RAILS_ENV.txt"
-
-# Clear cache
-cd $DEV_DIR/gobierto/; bin/rails runner $DEV_DIR/gobierto-etl-utils/operations/gobierto/clear-cache/run.rb --site-domain "$GENCAT_SITE_DOMAIN" --namespace "GobiertoData"
