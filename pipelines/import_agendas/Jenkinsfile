@@ -85,6 +85,11 @@ pipeline {
                 sh "cd ${GOBIERTO_ETL_UTILS}; ruby operations/upload-s3/run.rb /tmp/gencat/output/start_query_date.txt 'gencat/gobierto_people/last_execution/last_start_query_date-${RAILS_ENV}.txt'"
             }
         }
+        stage('Clear cache') {
+            steps {
+                sh "cd ${GOBIERTO}; bin/rails runner ${GOBIERTO_ETL_UTILS}/operations/gobierto/clear-cache/run.rb --site-domain '${GENCAT_SITE_DOMAIN}' --namespace 'GobiertoPeople'"
+            }
+        }
     }
     post {
         failure {
