@@ -20,12 +20,21 @@ module Utils
       puts "\n\n===================================="
       puts     "=========== Import Person ==========="
       puts "Processing #{ attributes.values.join(", ") }...\n\n"
-      # name = resolve_name_similarities(attributes[:name])
-      person = find_or_initialize_person(attributes[:name])
+      name = resolve_name_ignoring_conjunctions(attributes[:name])
+      person = find_or_initialize_person(name)
         # person = merge_duplicates(person)
       save_new(person) if person.new_record?
       puts "====================================="
       person
+    end
+
+    def resolve_name_ignoring_conjunctions(name)
+      proper_name = Utils::ProperName.new(name)
+      automatic_match = find_existing_person(proper_name)&.first
+
+      return name unless automatic_match.present?
+
+      automatic_match.name
     end
 
     def resolve_name_similarities(name)

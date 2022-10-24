@@ -40,7 +40,10 @@ NAMES_CONFLICT_RESOLUTIONS = {
     "Annabel Marcos"
   ],
   "Meritxell Borràs Solé" => [],
-  "Jaume Domingo i Planas" => []
+  "Jaume Domingo i Planas" => [],
+  "Tamara Garcia de la Calle" => [
+    "Tamara Garcia i de la Calle"
+  ]
 }.freeze
 
 

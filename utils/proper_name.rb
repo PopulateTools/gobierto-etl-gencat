@@ -31,12 +31,6 @@ module Utils
         end
       end
 
-      (0..components_without_conjunctions.length-3).each do |index|
-        if parameterized_components[index].length >1 && parameterized_components[index].last != "*"
-          parameterized_components[index] = abbrev_expr(parameterized_components[index])
-        end
-      end
-
       "^#{ parameterized_components.join("-").gsub(/-\(-/, "(-") }$"
     end
 
