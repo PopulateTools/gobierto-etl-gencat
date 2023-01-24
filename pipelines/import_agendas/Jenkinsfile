@@ -15,6 +15,9 @@ pipeline {
         // CLEAR_PREVIOUS_DATA = "True" or "False" (it must be a string with the boolean values from Python)
         // BASIC_AUTH_CREDENTIALS = username:password
     }
+    options {
+        retry(3)
+    }
     stages {
         stage('Extract > Download last start query date') {
             steps {
