@@ -2,6 +2,7 @@ require "json"
 require "uri"
 require "net/http"
 require "openssl"
+require "erb"
 
 module Utils
   class OriginDataset
@@ -92,7 +93,7 @@ module Utils
     end
 
     def query_url(conditions, format="csv")
-      URI.encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
+      ERB::Util.url_encode("#{ @url }/#{ @dataset_id }.#{ format }?#{ conditions.compact.join("&") }")
     end
 
     def data_count
