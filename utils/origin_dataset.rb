@@ -3,6 +3,7 @@ require "uri"
 require "net/http"
 require "openssl"
 require "erb"
+require "cgi"
 
 module Utils
   class OriginDataset
@@ -115,11 +116,11 @@ module Utils
     end
 
     def load_data(url)
-      uri = URI.parse(url)
+      uri = URI.parse(CGI.unescape(url))
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      request = Net::HTTP::Get.new(uri.request_uri)
+      request = Net::HTTP::Get.new(uri.to_s)
       request.basic_auth(*@basic_auth_credentials.split(":")) if DATASET_BASIC_AUTH[@dataset]
       response = http.request(request)
       response.body
