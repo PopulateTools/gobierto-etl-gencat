@@ -22,12 +22,12 @@ module Utils
     end
 
     def locations_list(attribute)
-      location_name = cleaned_text(attribute)
-      location_search_results = Geocoder.search(location_name)
-      location_search_results = [single_location_search(location_name)] unless location_search_results.count > 1
+      location_name = cleaned_text(attribute).delete("\"")
+      splitted_location_names = location_name.split("/").map(&:strip)
+      location_search_results = splitted_location_names.map { |name| single_location_search(name) }
       {
         "destinations" => location_search_results.each_with_index.map do |result, idx|
-          destination_object(result, location_name.split("/")[idx].strip)
+          destination_object(result, splitted_location_names[idx])
         end.compact
       }
     rescue StandardError => e
