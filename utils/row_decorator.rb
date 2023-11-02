@@ -56,8 +56,7 @@ module Utils
 
     def geocoder_single_search(name, locality_postfix = nil)
       name = "#{ name }, #{ locality_postfix }" if locality_postfix
-      results = Geocoder.search(name)
-      location = results.first
+      GobiertoCommon::Location.search(name)
     end
 
     def single_location_search(name)
@@ -78,11 +77,11 @@ module Utils
 
       {
         "name" => location_name,
-        "lat" => location.latitude,
-        "lon" => location.longitude,
-        "country_code" => Alpha2.find_by_country_name(location.country),
-        "country_name" => location.country,
-        "city_name" => location.city
+        "lat" => location.lat,
+        "lon" => location.lon,
+        "country_code" => Alpha2.find_by_country_name(location.country_name),
+        "country_name" => location.country_name,
+        "city_name" => location.city_name
       }
     end
   end
