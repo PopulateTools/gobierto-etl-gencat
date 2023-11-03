@@ -22,12 +22,12 @@ module Utils
     end
 
     def locations_list(attribute)
-      location_name = cleaned_text(attribute)
-      location_search_results = Geocoder.search(location_name)
-      location_search_results = [single_location_search(location_name)] unless location_search_results.count > 1
+      location_name = cleaned_text(attribute).delete("\"")
+      splitted_location_names = location_name.split("/").map(&:strip)
+      location_search_results = splitted_location_names.map { |name| single_location_search(name) }
       {
         "destinations" => location_search_results.each_with_index.map do |result, idx|
-          destination_object(result, location_name.split("/")[idx].strip)
+          destination_object(result, splitted_location_names[idx])
         end.compact
       }
     rescue StandardError => e
@@ -56,8 +56,7 @@ module Utils
 
     def geocoder_single_search(name, locality_postfix = nil)
       name = "#{ name }, #{ locality_postfix }" if locality_postfix
-      results = Geocoder.search(name)
-      location = results.first
+      GobiertoCommon::Location.search(name)
     end
 
     def single_location_search(name)
@@ -78,11 +77,11 @@ module Utils
 
       {
         "name" => location_name,
-        "lat" => location.latitude,
-        "lon" => location.longitude,
-        "country_code" => Alpha2.find_by_country_name(location.country),
-        "country_name" => location.country,
-        "city_name" => location.city
+        "lat" => location.lat,
+        "lon" => location.lon,
+        "country_code" => Alpha2.find_by_country_name(location.country_name),
+        "country_name" => location.country_name,
+        "city_name" => location.city_name
       }
     end
   end
