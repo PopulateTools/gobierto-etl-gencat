@@ -6,17 +6,18 @@ require "fileutils"
 module Utils
   class LocalStorage
     attr_writer :content
-    attr_reader :file_name, :base_path, :file_path, :file_pathname
+    attr_reader :file_name, :base_path, :file_pathname
 
     def initialize(content: nil, path: "output")
       @file_name = path.split("/").last
       @base_path = "/tmp/gencat/#{ path.gsub(/#{ @file_name }$/, "").gsub(/\.+/, ".") }"
       @file_pathname = Pathname.new(file_path)
       @content = content
+
+      FileUtils.mkdir_p(@base_path) unless File.exist?(@base_path)
     end
 
     def save
-      FileUtils.mkdir_p(base_path) unless File.exist?(base_path)
       File.open(file_path, "wb+") do |f|
         f.write(@content)
       end
@@ -50,12 +51,6 @@ module Utils
       elsif file_pathname.directory?
         file_pathname.rmtree
       end
-    end
-
-    protected
-
-    def file_pathname
-      Pathname.new(file_path)
     end
   end
 end
