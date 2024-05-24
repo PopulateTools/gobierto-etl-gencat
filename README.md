@@ -6,8 +6,6 @@ ETL scripts for GenCat import of events, gifts, invitations and trips
 
 Edit `.env.example` and copy it to `.env` or `.rbenv-vars` with the expected values.
 
-This repository relies heavily in [gobierto_budgets_data](https://github.com/PopulateTools/gobierto_budgets_data)
-
 ## Available operations
 
 - check-data-presence
