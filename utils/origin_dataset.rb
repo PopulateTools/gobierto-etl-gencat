@@ -62,6 +62,7 @@ module Utils
 
     def date_interval_condition
       return nil if @start_date.blank? && @end_date.blank?
+
       if @end_date.blank?
         "$where=:updated_at >= '#{ @start_date.utc.iso8601 }'"
       elsif @start_date.blank?
