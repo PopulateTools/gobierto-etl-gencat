@@ -55,6 +55,8 @@ module Utils
     LOCALITY_TYPES = %w(political locality).freeze
 
     def geocoder_single_search(name, locality_postfix = nil)
+      return if name.blank?
+
       name = "#{ name }, #{ locality_postfix }" if locality_postfix
       GobiertoCommon::Location.search(name)
     end
